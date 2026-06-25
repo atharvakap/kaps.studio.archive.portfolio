@@ -99,38 +99,38 @@ backend/
 
 ### Folder Responsibilities
 
-* [ ] core owns application infrastructure.
-* [ ] api owns HTTP layer only.
-* [ ] services own business logic.
-* [ ] database owns persistence.
-* [ ] models own ORM entities.
-* [ ] schemas own API validation.
-* [ ] assistant owns Virtual Me.
-* [ ] retrieval owns Hybrid Retrieval.
-* [ ] ingestion owns Knowledge Base ingestion.
-* [ ] storage owns Supabase Storage.
-* [ ] analytics owns metrics.
-* [ ] utils contains stateless helper utilities only.
+* [x] core owns application infrastructure.
+* [x] api owns HTTP layer only.
+* [x] services own business logic.
+* [x] database owns persistence.
+* [x] models own ORM entities.
+* [x] schemas own API validation.
+* [x] assistant owns Virtual Me.
+* [x] retrieval owns Hybrid Retrieval.
+* [x] ingestion owns Knowledge Base ingestion.
+* [x] storage owns Supabase Storage.
+* [x] analytics owns metrics.
+* [x] utils contains stateless helper utilities only.
 
 ---
 
 ### Project Standards
 
-* [ ] Stack confirmed
-* [ ] Naming conventions confirmed
-* [ ] API conventions confirmed
-* [ ] Database conventions confirmed
-* [ ] Logging strategy confirmed
-* [ ] Testing strategy confirmed
-* [ ] Configuration strategy confirmed
+* [x] Stack confirmed
+* [x] Naming conventions confirmed
+* [x] API conventions confirmed
+* [x] Database conventions confirmed
+* [x] Logging strategy confirmed
+* [x] Testing strategy confirmed
+* [x] Configuration strategy confirmed
 
 ---
 
 ## Verification
 
-* [ ] No unresolved architecture decisions.
-* [ ] Project structure approved.
-* [ ] Ready to begin implementation.
+* [x] No unresolved architecture decisions.
+* [x] Project structure approved.
+* [x] Ready to begin implementation.
 
 ---
 
@@ -162,11 +162,11 @@ Only infrastructure.
 
 ### Environment
 
-* [ ] Install Python 3.13+
-* [ ] Install uv
-* [ ] Initialize project
-* [ ] Initialize Git
-* [ ] Create virtual environment
+* [x] Install Python 3.13+
+* [x] Install uv
+* [x] Initialize project
+* [x] Initialize Git
+* [x] Create virtual environment
 
 ---
 
