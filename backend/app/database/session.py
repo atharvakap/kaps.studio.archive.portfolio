@@ -13,6 +13,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.config import settings
+from app.logging import logger
 
 if not settings.database_url:
     raise ValueError("DATABASE_URL environment variable is missing or empty.")
@@ -46,8 +47,8 @@ async def verify_database_connection():
     try:
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
-            print("Successfully connected to PostgreSQL!")
+            logger.info("Successfully connected to PostgreSQL!")
     except Exception as e:
-        print(f"CRITICAL: Database connection failed. Error: {e}")
+        logger.info(f"CRITICAL: Database connection failed. Error: {e}")
         await engine.dispose()
         raise
