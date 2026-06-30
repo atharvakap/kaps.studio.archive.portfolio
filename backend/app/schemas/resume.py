@@ -1,18 +1,23 @@
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class ResumeBase(BaseModel):
     file_url: str
     version: str
 
+
 class ResumeCreate(ResumeBase):
     pass
+
 
 class ResumeUpdate(BaseModel):
     file_url: Optional[str] = None
     version: Optional[str] = None
+
 
 class ResumeRead(ResumeBase):
     id: UUID

@@ -1,8 +1,11 @@
-from sqlalchemy.orm import Mapped, mapped_column
+import uuid
+
 from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
 from app.database.base import Base
 from app.models.mixins import TimestampMixin
-import uuid
+
 
 class Resume(Base, TimestampMixin):
     __tablename__ = "resumes"

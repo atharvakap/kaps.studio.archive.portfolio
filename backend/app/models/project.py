@@ -1,12 +1,15 @@
+import uuid
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Boolean, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Text, Boolean
+
 from app.database.base import Base
 from app.models.mixins import TimestampMixin
-from typing import TYPE_CHECKING
-import uuid
 
 if TYPE_CHECKING:
     from app.models.project_skill import ProjectSkill
+
 
 class Project(Base, TimestampMixin):
     __tablename__ = "projects"
@@ -22,7 +25,5 @@ class Project(Base, TimestampMixin):
 
     # Typo fixed: projects_skills -> project_skills
     project_skills: Mapped[list["ProjectSkill"]] = relationship(
-        "ProjectSkill",
-        back_populates="project",
-        cascade="all, delete-orphan"
+        "ProjectSkill", back_populates="project", cascade="all, delete-orphan"
     )

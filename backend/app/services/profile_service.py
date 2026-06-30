@@ -1,6 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.models.profile import Profile
+
 
 class ProfileService:
     def __init__(self, session: AsyncSession):

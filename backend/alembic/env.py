@@ -10,14 +10,6 @@ from alembic import context
 from app.config import settings
 from app.database.base import Base
 
-from app.models.profile import Profile
-from app.models.skill import Skill
-from app.models.project import Project
-from app.models.project_skill import ProjectSkill
-from app.models.testimonial import Testimonial
-from app.models.resume import Resume
-from app.models.contact_message import ContactMessage
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
