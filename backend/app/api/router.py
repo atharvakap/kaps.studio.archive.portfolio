@@ -2,7 +2,13 @@
 
 from fastapi import APIRouter
 
-from app.api.health import router
+from app.api import contact, health, profile, projects, resume, skills, testimonials
 
-api_router = APIRouter()
-api_router.include_router(router, tags=["health"])
+api_router = APIRouter(prefix="/api")
+api_router.include_router(health.router)
+api_router.include_router(contact.router)
+api_router.include_router(profile.router)
+api_router.include_router(projects.router)
+api_router.include_router(resume.router)
+api_router.include_router(skills.router)
+api_router.include_router(testimonials.router)

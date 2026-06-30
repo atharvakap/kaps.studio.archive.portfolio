@@ -1,20 +1,25 @@
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class TestimonialBase(BaseModel):
     author_name: str
     author_role: str
     content: str
 
+
 class TestimonialCreate(TestimonialBase):
     pass
+
 
 class TestimonialUpdate(BaseModel):
     author_name: Optional[str] = None
     author_role: Optional[str] = None
     content: Optional[str] = None
+
 
 class TestimonialRead(TestimonialBase):
     id: UUID

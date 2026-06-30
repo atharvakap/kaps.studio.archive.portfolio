@@ -1,8 +1,11 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional, List
-from uuid import UUID
 from datetime import datetime
+from typing import List, Optional
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
 from app.schemas.skill import SkillSummary
+
 
 class ProjectBase(BaseModel):
     name: str
@@ -30,8 +33,8 @@ class ProjectUpdate(BaseModel):
 
 class ProjectRead(ProjectBase):
     id: UUID
-    created_date: datetime
-    updated_date: datetime
+    created_at: datetime
+    updated_at: datetime
 
     skills: List[SkillSummary] = []
     model_config = ConfigDict(from_attributes=True)

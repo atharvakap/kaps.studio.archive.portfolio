@@ -1,7 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class SkillBase(BaseModel):
     name: str
@@ -10,7 +12,7 @@ class SkillBase(BaseModel):
 
 
 class SkillCreate(SkillBase):
-    pass 
+    pass
 
 
 class SkillUpdate(BaseModel):

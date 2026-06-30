@@ -1,8 +1,11 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from typing import Sequence
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.models.contact_message import ContactMessage
 from app.schemas.contact_message import ContactMessageCreate
+
 
 class ContactService:
     def __init__(self, session: AsyncSession):

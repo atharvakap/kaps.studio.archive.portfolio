@@ -1,7 +1,14 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
-from app.database.base import Base
 import uuid
+from typing import TYPE_CHECKING
+
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database.base import Base
+
+if TYPE_CHECKING:
+    from app.models.project import Project
+    from app.models.skill import Skill
 
 class ProjectSkill(Base):
     __tablename__ = "project_skills"
