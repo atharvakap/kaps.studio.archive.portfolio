@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     database_url: str | None = None
 
     openai_api_key: str | None = None
+    openai_embedding_model: str = "text-embedding-3-small"
 
     supabase_url: str | None = None
     supabase_anon_key: str | None = None
