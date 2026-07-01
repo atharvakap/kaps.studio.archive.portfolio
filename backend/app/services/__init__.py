@@ -4,6 +4,7 @@ from .project_service import ProjectService
 from .resume_service import ResumeService
 from .skill_service import SkillService
 from .testimonial_service import TestimonialService
+from .upload_service import UploadService
 
 __all__ = [
     "ContactService",
@@ -12,4 +13,5 @@ __all__ = [
     "ResumeService",
     "SkillService",
     "TestimonialService",
+    "UploadService",
 ]

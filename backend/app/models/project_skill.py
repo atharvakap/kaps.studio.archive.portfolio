@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.models.project import Project
     from app.models.skill import Skill
 
+
 class ProjectSkill(Base):
     __tablename__ = "project_skills"
 

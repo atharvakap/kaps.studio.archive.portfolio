@@ -10,6 +10,9 @@ from app.services.project_service import ProjectService
 from app.services.resume_service import ResumeService
 from app.services.skill_service import SkillService
 from app.services.testimonial_service import TestimonialService
+from app.services.upload_service import UploadService
+from app.storage.service import StorageService
+from app.storage.validator import UploadValidator
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -41,3 +44,20 @@ def get_resume_service(db: AsyncSession = Depends(get_db)) -> ResumeService:
 
 def get_contact_service(db: AsyncSession = Depends(get_db)) -> ContactService:
     return ContactService(db)
+
+
+def get_storage_service() -> StorageService:
+    return StorageService()
+
+
+def get_upload_validator() -> UploadValidator:
+    """Provides the file validation rules."""
+    return UploadValidator()
+
+
+def get_upload_service(
+    storage_service: StorageService = Depends(get_storage_service),
+    validator: UploadValidator = Depends(get_upload_validator),
+) -> UploadService:
+    """Provides an UploadService orchestrated with Storage and Validation."""
+    return UploadService(storage_service, validator)
