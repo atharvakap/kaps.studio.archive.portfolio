@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     supabase_url: str | None = None
     supabase_anon_key: str | None = None
     supabase_service_role_key: str | None = None
+    SUPABASE_STORAGE_BUCKET: str = "portfolio-media"
+
+    max_upload_size_mb: int = 5
+    allowed_mime_types: list[str] = ["image/jpeg", "image/png", "image/webp", "application/pdf"]
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

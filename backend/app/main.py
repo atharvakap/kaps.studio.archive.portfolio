@@ -5,7 +5,11 @@ from fastapi.responses import JSONResponse
 
 from app.api.router import api_router
 from app.database.session import verify_database_connection
-from app.exceptions import NotFoundError
+from app.exceptions import (
+    FileTooLargeError,
+    InvalidFileTypeError,
+    NotFoundError,
+)
 from app.logging import logger
 
 
@@ -29,6 +33,16 @@ async def not_found_exception_handler(request: Request, exc: NotFoundError):
         status_code=404,
         content={"detail": exc.message},
     )
+
+
+@app.exception_handler(InvalidFileTypeError)
+async def invalid_file_type_exception_handler(request: Request, exc: InvalidFileTypeError):
+    return JSONResponse(status_code=400, content={"detail": exc.message})
+
+
+@app.exception_handler(FileTooLargeError)
+async def file_too_large_exception_handler(request: Request, exc: FileTooLargeError):
+    return JSONResponse(status_code=413, content={"detail": exc.message})
 
 
 # Register the root router

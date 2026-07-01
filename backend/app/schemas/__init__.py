@@ -9,12 +9,33 @@ from .project import ProjectBase, ProjectCreate, ProjectRead, ProjectUpdate
 from .resume import ResumeBase, ResumeCreate, ResumeRead, ResumeUpdate
 from .skill import SkillBase, SkillCreate, SkillRead, SkillSummary, SkillUpdate
 from .testimonial import TestimonialBase, TestimonialCreate, TestimonialRead, TestimonialUpdate
+from .upload import UploadResult
 
 __all__ = [
-    "ContactMessageBase", "ContactMessageCreate", "ContactMessageRead", "ContactMessageUpdate",
-    "ProfileBase", "ProfileCreate", "ProfileRead", "ProfileUpdate",
-    "ProjectBase", "ProjectCreate", "ProjectRead", "ProjectUpdate",
-    "ResumeBase", "ResumeCreate", "ResumeRead", "ResumeUpdate",
-    "SkillBase", "SkillCreate", "SkillRead", "SkillSummary", "SkillUpdate",
-    "TestimonialBase", "TestimonialCreate", "TestimonialRead", "TestimonialUpdate",
+    "ContactMessageBase",
+    "ContactMessageCreate",
+    "ContactMessageRead",
+    "ContactMessageUpdate",
+    "ProfileBase",
+    "ProfileCreate",
+    "ProfileRead",
+    "ProfileUpdate",
+    "ProjectBase",
+    "ProjectCreate",
+    "ProjectRead",
+    "ProjectUpdate",
+    "ResumeBase",
+    "ResumeCreate",
+    "ResumeRead",
+    "ResumeUpdate",
+    "SkillBase",
+    "SkillCreate",
+    "SkillRead",
+    "SkillSummary",
+    "SkillUpdate",
+    "TestimonialBase",
+    "TestimonialCreate",
+    "TestimonialRead",
+    "TestimonialUpdate",
+    "UploadResult",
 ]
