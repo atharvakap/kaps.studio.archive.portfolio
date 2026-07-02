@@ -1,21 +1,17 @@
-from .contact_message import ContactMessage  # noqa: F401
-from .document_chunk import DocumentChunk  # noqa: F401
-from .knowledge_document import KnowledgeDocument  # noqa: F401
-from .profile import Profile  # noqa: F401
-from .project import Project  # noqa: F401
-from .project_skill import ProjectSkill  # noqa: F401
-from .resume import Resume  # noqa: F401
-from .skill import Skill  # noqa: F401
-from .testimonial import Testimonial  # noqa: F401
+# Existing Portfolio Models
+from .profile import Profile
+from .resume import Resume
+from .testimonial import Testimonial
+from .project import Project
+from .skill import Skill
+from .project_skill import ProjectSkill
+from .contact_message import ContactMessage
 
-__all__ = [
-    "ContactMessage",
-    "DocumentChunk",
-    "KnowledgeDocument",
-    "Profile",
-    "Project",
-    "ProjectSkill",
-    "Resume",
-    "Skill",
-    "Testimonial",
-]
+# AI & Knowledge Models
+from .knowledge_document import KnowledgeDocument
+from .document_chunk import DocumentChunk
+
+# New Chat Models
+from .chat_visitor import ChatVisitor
+from .chat_thread import ChatThread
+from .chat_message import ChatMessage
