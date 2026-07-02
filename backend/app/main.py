@@ -11,6 +11,7 @@ from app.exceptions import (
     NotFoundError,
 )
 from app.logging import logger
+from app.api import chat
 
 
 # FastAPI has deprecated @app.on_event("startup")
@@ -47,3 +48,5 @@ async def file_too_large_exception_handler(request: Request, exc: FileTooLargeEr
 
 # Register the root router
 app.include_router(api_router)
+
+app.include_router(chat.router)
