@@ -19,6 +19,7 @@ dependencies = [
     "pytest-asyncio>=1.4.0",
     "supabase>=2.31.0",
     "docling>=2.108.0",
+    "openai>=2.44.0",
 ]
 
 [dependency-groups]

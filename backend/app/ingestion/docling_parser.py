@@ -2,7 +2,9 @@ import asyncio
 import os
 import tempfile
 
-from docling.document_converter import DocumentConverter
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 from app.ingestion.parser import DocumentParser, ParsedDocument
 from app.logging import logger
@@ -15,8 +17,14 @@ class DoclingParser(DocumentParser):
     """
 
     def __init__(self):
-        # Initialize the heavy Docling converter once
-        self.converter = DocumentConverter()
+        # 1. Create pipeline options and explicitly turn OFF OCR
+        pipeline_options = PdfPipelineOptions()
+        pipeline_options.do_ocr = False
+
+        # 2. Pass those options into the converter to bypass the PyTorch crash
+        self.converter = DocumentConverter(
+            format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
+        )
         self.supported_formats = ["markdown", "pdf", "text", "resume", "json"]
 
     async def parse(self, raw_content: str, source_type: str, title: str) -> ParsedDocument:
