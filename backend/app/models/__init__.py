@@ -15,3 +15,8 @@ from .document_chunk import DocumentChunk
 from .chat_visitor import ChatVisitor
 from .chat_thread import ChatThread
 from .chat_message import ChatMessage
+
+from .contact_submission_event import ContactSubmissionEvent
+from .resume_download import ResumeDownload
+from .chat_event import ChatEvent
+from .contact_submission_event import ContactSubmissionEvent
