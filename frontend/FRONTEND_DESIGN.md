@@ -1,53 +1,116 @@
-# FRONTEND_DESIGN.md
+# EXPERIENCE_ARCHITECTURE.md
 
-> Version: 1.0
-> Status: Living Document
-> Governing Documents:
+> **Project:** Portfolio 2.0
+> **Status:** Living Document
+> **Version:** 1.0
 >
-> 1. PROJECT_CONSTITUTION.md
-> 2. INFORMATION_ARCHITECTURE.md
-> 3. ARCHITECTURE.md
-> 4. FRONTEND_DESIGN.md
+> This document defines the frontend experience architecture of Portfolio 2.0.
+> It is the source of truth for the application's visual philosophy,
+> storytelling, interaction language and user experience.
+>
+> This document intentionally freezes the experience philosophy while allowing
+> implementation details to evolve during development.
+
+---
+
+# Governance
+
+This document follows the project governance hierarchy.
+
+1. PROJECT_CONSTITUTION.md
+2. INFORMATION_ARCHITECTURE.md
+3. ARCHITECTURE.md
+4. EXPERIENCE_ARCHITECTURE.md
+
+If any decision conflicts with a higher-level governing document,
+the higher-level document takes precedence.
 
 ---
 
 # Purpose
 
-This document defines the frontend philosophy, visual language, interaction model and
-experience architecture of Portfolio 2.0.
+Portfolio 2.0 is not merely a website.
+
+It is an interactive digital experience that communicates the creator's
+identity through engineering, design, storytelling and craftsmanship.
 
 Unlike ARCHITECTURE.md, which defines how the application is engineered,
-this document defines how the application should be experienced.
+this document defines how the application should feel.
 
-This document intentionally freezes the overall frontend philosophy,
-experience architecture and interaction principles while allowing visual
-polish to evolve naturally during implementation.
-
-It should be treated as the source of truth for every frontend decision.
+Every frontend decision should be evaluated against this document.
 
 ---
 
-# Philosophy
+# Experience Philosophy
 
-Portfolio 2.0 is not designed to feel like a website.
+The application should never feel like navigating software.
 
-It is not designed to imitate an operating system.
+Instead, it should feel like discovering an intentionally crafted piece of work.
 
-It is not intended to showcase visual effects.
+Technology exists to support the experience.
 
-It is intended to feel like an interactive piece of carefully crafted artwork.
+The visitor should remember
 
-Every interaction should reinforce that feeling.
+- the feeling,
+- the craftsmanship,
+- the atmosphere,
 
-Technology exists only to serve the experience.
+before they remember the animations or technologies used.
 
 ---
 
-# Experience Goal
+# Design Principles
 
-The visitor should feel that they are discovering the creator rather than navigating a website.
+## Simplicity over Complexity
 
-The portfolio should communicate:
+Complex interactions should never exist purely because they are technically
+possible.
+
+The simplest implementation that communicates the intended feeling should
+always be preferred.
+
+---
+
+## Craftsmanship over Effects
+
+Visual effects are not the objective.
+
+Attention to detail is.
+
+Small details executed exceptionally well are preferred over many large effects.
+
+---
+
+## Materials over Decorations
+
+The application should feel constructed from physical materials rather than
+digital UI components.
+
+Every visual element should appear to belong to the same world.
+
+---
+
+## Calm over Noise
+
+Movement should be intentional.
+
+Animations should create focus rather than demand attention.
+
+The experience should feel calm, premium and confident.
+
+---
+
+## Timeless over Trendy
+
+The design should avoid chasing temporary design trends.
+
+The application should still feel modern several years after it is built.
+
+---
+
+# Experience Goals
+
+The portfolio should communicate
 
 • Engineering Precision
 
@@ -55,266 +118,350 @@ The portfolio should communicate:
 
 • Curiosity
 
+• Attention to Detail
+
 • Simplicity
 
-• Attention to Detail
+without explicitly saying so.
+
+The visitor should naturally infer these qualities through the experience.
 
 ---
 
 # Overall Concept
 
-The entire experience is built around a single physical metaphor.
+Portfolio 2.0 is built around the visual language of handcrafted materials.
 
-The visitor is looking at a premium handcrafted paper canvas.
+The experience combines
 
-The paper is not merely a background.
+- Premium paper
+- Watercolor artwork
+- Modern liquid glass
+- Minimal interactions
+- Calm motion
 
-It is the foundation of the experience.
+The application should feel like carefully designed artwork rather than a
+traditional software interface.
 
-Hidden beneath the paper is the creator's identity.
-
-The About section is introduced by physically revealing that identity through
-a carefully animated paper tear.
-
-After this narrative introduction the portfolio behaves as a modern digital
-application while continuing to preserve the illusion of physical materials.
+The first release intentionally favors production-ready implementation while
+preserving the long-term artistic vision.
 
 ---
 
 # Material Language
 
-The frontend is constructed from four primary materials.
+## Premium Paper
 
-## Paper
-
-Represents permanence.
-
-Foundation of the application.
+The paper represents the foundation of the experience.
 
 Characteristics
 
 - Premium cotton paper
-- Warm white
-- Visible fibres
-- Very subtle watermark
+- Warm neutral white
 - Matte finish
-- Never glossy
+- Visible fibers
+- Extremely subtle watermark
+- Soft imperfections
 
-Paper should feel valuable.
+The paper fills the entire viewport.
+
+It is the visual foundation of every section.
 
 ---
 
-## Portrait
+## Watercolor Portrait
 
-Represents identity.
+The portrait represents identity.
 
-The portrait exists beneath the paper.
+It should feel artistic rather than photographic.
 
-It is revealed rather than displayed.
+The artwork should communicate personality while remaining elegant and
+professional.
 
-The portrait should feel like artwork rather than photography.
-
-Future artistic interpretations are encouraged.
+Future reinterpretations of the portrait are encouraged.
 
 ---
 
 ## Liquid Glass
 
-Represents engineering.
-
-Liquid Glass is not the visual identity.
-
-It exists only as a modern interface layer.
+Liquid Glass represents the digital layer.
 
 Responsibilities
 
-- Interactive controls
 - Navigation
-- Floating UI
-- Panels
-- Controls
+- Buttons
+- Cards
+- Floating controls
+- Dialogs
+- Interactive UI
 
-It should remain visually restrained.
+Glass should complement the paper rather than overpower it.
+
+Its presence should feel refined and restrained.
 
 ---
 
-## Light
+## Ambient Light
 
-Lighting is environmental.
+Lighting belongs to the environment.
 
 Lighting never follows the cursor.
 
-Lighting exists to reveal material qualities.
+Lighting exists only to reveal materials and depth.
 
-Depth should be communicated through geometry rather than moving light sources.
-
----
-
-# Motion Philosophy
-
-Motion exists only when it communicates meaning.
-
-Motion should never exist for decoration.
-
-Every movement should feel physically believable.
+The application should never resemble a spotlight demonstration.
 
 ---
 
-# Narrative Architecture
+# Color Philosophy
 
-The portfolio tells a story.
+Colors should remain soft and material driven.
 
-It should always follow this journey.
+The paper should remain the dominant visual element.
 
-Visitor
+Accent colors should primarily originate from
 
-↓
+- Brand identity
+- Artwork
+- Interactive highlights
 
-Terminal Boot Experience
-
-↓
-
-Workspace Initialisation
-
-↓
-
-Loading disappears
-
-↓
-
-Paper Canvas appears
-
-↓
-
-Paper tears open
-
-↓
-
-Portrait is revealed
-
-↓
-
-About section becomes visible
-
-↓
-
-Exploration begins
-
-This sequence is considered part of the identity of Portfolio 2.0.
+Large saturated areas should generally be avoided.
 
 ---
 
-# About Experience
+# Typography Philosophy
 
-The About section is unique.
+Typography should feel confident and timeless.
 
-It is the only experience in which the paper is physically torn.
+Readability is always more important than stylistic experimentation.
 
-Purpose
+The typography should support the handcrafted material language rather than
+compete with it.
 
-Reveal the creator.
-
-The tear is not a transition.
-
-The tear is a narrative event.
+Exact typefaces remain implementation decisions.
 
 ---
 
-# Navigation Philosophy
+# Composition Philosophy
 
-Leaving the About section causes the paper to seal itself.
+Every page should feel intentionally composed.
 
-Once sealed, the remaining sections transition using simple,
-elegant application transitions.
+The visitor should experience the composition exactly as designed.
 
-The paper tear must never become a generic page transition.
+The layout should resemble a carefully arranged poster or exhibition rather
+than an adaptive dashboard.
 
-Its narrative importance must be preserved.
-
----
-
-# Physical World Rules
-
-Every object obeys the same physical world.
-
-Paper has thickness.
-
-Paper bends.
-
-Paper casts shadows.
-
-Portrait remains still.
-
-Glass remains stable.
-
-Lighting remains ambient.
-
-The camera remains fixed.
-
-Only meaningful interactions introduce movement.
+Whitespace is an active design element.
 
 ---
 
 # Camera Philosophy
 
-The camera is intentionally fixed.
+The camera is fixed.
 
-Visitors should experience the composition exactly as designed.
+There is
 
-Depth should emerge through
+- no camera movement
+- no parallax
+- no cursor-based perspective changes
 
-- Geometry
-- Layering
-- Shadows
-- Material response
+Depth should emerge naturally through
 
-rather than camera movement.
+- composition
+- layering
+- materials
+- shadows
+
+rather than camera motion.
+
+---
+
+# Motion Philosophy
+
+Motion should always communicate purpose.
+
+Animations should never exist for decoration.
+
+Movement should feel natural and restrained.
+
+---
+
+## Narrative Motion
+
+Used for
+
+- Terminal boot
+- Homepage reveal
+
+---
+
+## Material Motion
+
+Used for
+
+- Glass interaction
+- Hover feedback
+
+---
+
+## Application Motion
+
+Used for
+
+- Navigation
+- Section changes
+- Component transitions
+
+---
+
+## Decorative Motion
+
+Avoid whenever possible.
+
+If motion does not improve understanding or emotion,
+it should not exist.
+
+---
+
+# Hero Experience
+
+The homepage introduces the creator.
+
+It follows a deliberate narrative.
+
+Visitor
+
+↓
+
+Terminal Boot
+
+↓
+
+Application Initialization
+
+↓
+
+Terminal Fades Out
+
+↓
+
+Homepage Fades In
+
+↓
+
+About Section Appears
+
+↓
+
+Exploration Begins
+
+The transition should feel cinematic yet subtle.
+
+---
+
+# About Section
+
+The About section represents the introduction of the creator.
+
+It should receive the greatest visual emphasis.
+
+The portrait serves as the emotional focal point.
+
+The content should feel welcoming rather than overwhelming.
+
+---
+
+# Navigation Philosophy
+
+Portfolio 2.0 is a viewport-based Single Page Application.
+
+The application never scrolls.
+
+Navigation replaces the visible section.
+
+The viewport itself becomes the stage.
+
+Every section should be designed specifically for viewport presentation.
 
 ---
 
 # Interaction Philosophy
 
-Interaction should feel like interacting with physical materials.
+Interaction should feel immediate but gentle.
 
-Desktop
+Hover effects should remain subtle.
 
-Paper edges respond to pointer proximity.
+Interactive elements should never distract from content.
 
-Mobile
+Desktop interactions should prioritize cursor feedback.
 
-Paper edges respond to scrolling behaviour.
+Mobile interactions should prioritize touch responsiveness.
 
-Interactions should remain subtle.
-
-The illusion should never be broken.
+Interaction should reinforce confidence rather than excitement.
 
 ---
 
-# Motion Hierarchy
+# Responsive Philosophy
 
-Narrative Motion
+The experience should remain consistent across devices.
 
-- Boot
-- Paper Tear
-- Paper Seal
+Desktop, tablet and mobile should feel like the same product rather than
+different websites.
 
-Material Motion
+Layouts may adapt.
 
-- Paper edge response
-- Liquid Glass interactions
+The experience should not.
 
-Application Motion
+---
 
-- Section transitions
-- Hover states
-- Window animations
+# Visual Hierarchy
 
-Decorative Motion
+Primary focus
 
-None.
+- Portrait
+- Section title
 
-If a motion has no purpose,
-it should not exist.
+Secondary focus
+
+- Content
+- Navigation
+
+Tertiary focus
+
+- Decorative elements
+- Background details
+
+The hierarchy should remain clear throughout the application.
+
+---
+
+# Background Philosophy
+
+The background is not empty space.
+
+It is part of the physical material language.
+
+Implementation
+
+- Premium paper texture
+- Subtle fibers
+- Watermark
+- Very gentle tonal variation
+
+The background should never compete with foreground content.
+
+---
+
+# UI Philosophy
+
+UI should feel lightweight.
+
+Components should never dominate the experience.
+
+Every UI element should appear intentionally placed.
+
+Floating UI should utilize Liquid Glass while maintaining excellent
+readability.
 
 ---
 
@@ -322,89 +469,110 @@ it should not exist.
 
 The frontend consists of independent systems.
 
-## Narrative System
+---
 
-Responsible for
+## Experience Layer
+
+Responsibilities
 
 - Boot sequence
-- Tear animation
-- Intro flow
+- Homepage reveal
+- Experience orchestration
+- Section transitions
 
 ---
 
-## Material System
+## Material Layer
 
-Responsible for
+Responsibilities
 
-- Paper
-- Shadows
-- Materials
-- Geometry
+- Paper texture
+- Watermark
 - Portrait
+- Background
+- Glass styling
 
 ---
 
-## Interaction System
+## Interaction Layer
 
-Responsible for
+Responsibilities
 
 - Hover interactions
-- Scroll interactions
-- Glass behaviour
+- Responsive behavior
+- Glass interactions
+- Motion orchestration
 
 ---
 
-## UI System
+## UI Layer
 
-Responsible for
+Responsibilities
 
 - Navigation
 - Components
-- Windows
+- Layout
 - Forms
+- Windows
+- Overlays
 
 ---
 
-## Content System
+## Content Layer
 
-Responsible for rendering application content.
+Responsibilities
 
-The content layer should never own the physical world.
+- Rendering backend content
+- Resume
+- Projects
+- Skills
+- Experience
+- AI responses
+
+The Content Layer should remain completely independent from the Material Layer.
 
 ---
 
 # Separation of Responsibilities
 
-Blender
+## Blender
 
 Responsible for
 
-- Physical assets
-- Paper mesh
-- Tear animation
-- Geometry
-- Composition
+- Watercolor artwork
+- Static visual assets
+- Material authoring
+- Future artistic assets
 
-React Three Fiber
+---
 
-Responsible for
-
-- Rendering
-- Scene
-- Animation playback
-- Runtime interaction
-
-React
+## React
 
 Responsible for
 
 - UI
 - Routing
-- Data
 - State
-- API communication
+- Content
+- Component rendering
 
-Backend
+---
+
+## React Three Fiber
+
+Responsible only if required.
+
+Responsibilities
+
+- Rendering advanced assets
+- Interactive visual elements
+- Future visual enhancements
+
+Version 1 should avoid unnecessary complexity.
+
+---
+
+## Backend
 
 Responsible for
 
@@ -412,32 +580,67 @@ Responsible for
 - AI
 - Media
 - Configuration
+- APIs
 
 ---
 
 # Component Independence
 
-Every feature should be independently replaceable.
+Every feature should remain independent.
 
-Changing a section should never require changing
-the physical world.
+Changing one feature should never require modifying another.
 
-Changing the physical world should never require changing
-the backend.
+Examples
 
-No feature should have hidden dependencies on another.
+Changing navigation
+
+↓
+
+Should not require changing the material system.
+
+Changing the portrait
+
+↓
+
+Should not require changing backend APIs.
+
+Changing content
+
+↓
+
+Should not require changing animations.
 
 ---
 
 # Performance Philosophy
 
-Performance is part of the experience.
+Performance is part of the design.
 
-Effects should exist because they improve immersion,
-not because they demonstrate technical capability.
+Every animation should justify its existence.
 
-The simplest implementation that preserves the illusion
-should always be preferred.
+Avoid
+
+- expensive rendering
+- unnecessary JavaScript
+- excessive effects
+
+Prefer smooth interactions over impressive demonstrations.
+
+---
+
+# Accessibility Philosophy
+
+The application should remain usable for everyone.
+
+Ensure
+
+- readable typography
+- sufficient contrast
+- keyboard accessibility
+- reduced motion support
+- semantic HTML
+
+Accessibility is a feature rather than an afterthought.
 
 ---
 
@@ -445,11 +648,55 @@ should always be preferred.
 
 Portfolio 2.0 intentionally does not attempt to
 
-- Replicate macOS
-- Simulate a desktop operating system
-- Showcase excessive visual effects
-- Animate continuously
-- Build interactions without narrative purpose
+- Replicate desktop operating systems
+- Mimic macOS
+- Showcase every frontend technology
+- Continuously animate every component
+- Prioritize visual effects over usability
+
+---
+
+# Version 1 Implementation Strategy
+
+The first release prioritizes shipping a polished production experience.
+
+Implementation choices intentionally favor
+
+- simplicity
+- maintainability
+- performance
+- reliability
+
+over experimental rendering techniques.
+
+Current implementation includes
+
+- Premium paper background
+- Watercolor portrait
+- Liquid Glass UI
+- Terminal loading sequence
+- Fixed composition
+- Single-page viewport navigation
+
+This establishes the visual identity while remaining practical to build.
+
+---
+
+# Long-Term Vision
+
+Future versions may introduce
+
+- Physically animated paper tearing
+- Runtime material deformation
+- Interactive paper edges
+- Blender-authored cinematic transitions
+- Advanced shaders
+- Optical material interactions
+- Enhanced environmental storytelling
+
+These features represent evolution rather than redesign.
+
+The philosophy defined within this document should remain unchanged.
 
 ---
 
@@ -459,29 +706,32 @@ This document freezes
 
 - Philosophy
 - Storytelling
-- Material language
 - Experience architecture
-- Responsibilities
-- Interaction hierarchy
+- Material language
+- Motion hierarchy
+- Frontend responsibilities
 
-This document intentionally does not freeze
+This document intentionally does NOT freeze
 
-- Colours
-- Typography
-- Iconography
-- Animation timings
+- Colors
+- Fonts
+- Icons
 - Component layouts
-- Spacing
+- Animation timings
+- Exact spacing
 - UI polish
+- Visual refinements
 
-These may evolve naturally during implementation
-provided they do not violate the philosophy defined above.
+Those decisions should naturally evolve throughout development while
+remaining consistent with the philosophy defined here.
 
 ---
 
 # Design Decision Log
 
-Every major frontend decision should be recorded here.
+Every significant frontend decision should be documented.
 
-The goal is to prevent repeatedly revisiting previously
-approved design decisions while still allowing thoughtful evolution.
+The purpose is to preserve thoughtful decisions while preventing repeated
+reconsideration of already approved concepts.
+
+Changes should strengthen the philosophy rather than replace it.
