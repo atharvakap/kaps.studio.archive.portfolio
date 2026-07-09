@@ -1,0 +1,16 @@
+@theme {
+    /* Colors */
+    --color-paper: #ffffff;
+    --color-ink: #111111;
+    --color-ink-muted: #555555;
+
+    /* Typography */
+    /* We will set standard fonts later, but mono is critical for the boot screen */
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
+:root {
+    /* Base CSS variables for global use outside of Tailwind if needed */
+    --bg-color: var(--color-paper);
+    --text-color: var(--color-ink);
+}

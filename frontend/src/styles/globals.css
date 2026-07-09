@@ -1,0 +1,15 @@
+/* src/styles/globals.css */
+
+/* 1. Tailwind Engine (Must be first) */
+@import "tailwindcss";
+
+/* 2. Global Variables & Theme */
+@import "./variables.css";
+
+/* 3. Base Resets */
+@import "./reset.css";
+
+/* 4. Custom Animations */
+@import "./animations.css";
+
+/* Note: glass.css and paper.css can be imported here later */
