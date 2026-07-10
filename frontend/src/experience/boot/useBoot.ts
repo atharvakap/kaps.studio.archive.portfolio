@@ -1,20 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import type { BootState } from './types'
 
-export const useBoot = () => {
-  const [bootState, setBootState] = useState<BootState>('booting')
+export const useBoot = (isAppReady: boolean) => {
+  // Track individual conditions
+  const [isSequenceComplete, setIsSequenceComplete] = useState(false)
+  const [isFinished, setIsFinished] = useState(false)
 
-  // Simulate the app loading and the terminal timeline finishing.
-  // In Step 0.5, we will trigger this state change based on the typing animation completing.
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setBootState('ready')
-    }, 2500)
-    return () => clearTimeout(timer)
+  /**
+   * We derive bootState directly during render.
+   * This ensures there is no "cascading render" effect.
+   */
+  const getBootState = (): BootState => {
+    if (isFinished) return 'finished'
+    if (isSequenceComplete && isAppReady) return 'ready'
+    return 'booting'
+  }
+
+  const bootState = getBootState()
+
+  // Called by Terminal component when typing finishes
+  const markSequenceComplete = useCallback(() => {
+    setIsSequenceComplete(true)
   }, [])
 
-  // Called automatically when Framer Motion finishes the fade-out animation
-  const finishBoot = () => setBootState('finished')
+  // Called by Framer Motion after fade-out completes
+  const finishBoot = useCallback(() => {
+    setIsFinished(true)
+  }, [])
 
-  return { bootState, finishBoot }
+  return {
+    bootState,
+    markSequenceComplete,
+    finishBoot,
+  }
 }

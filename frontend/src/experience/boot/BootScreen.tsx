@@ -1,12 +1,15 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useBoot } from './useBoot'
+import { Terminal } from './Terminal'
 
 interface BootScreenProps {
+  isAppReady: boolean // <-- New prop
   children: React.ReactNode
 }
 
-export const BootScreen = ({ children }: BootScreenProps) => {
-  const { bootState, finishBoot } = useBoot()
+export const BootScreen = ({ isAppReady, children }: BootScreenProps) => {
+  // Pass app readiness into the hook
+  const { bootState, markSequenceComplete, finishBoot } = useBoot(isAppReady)
 
   return (
     <>
@@ -16,21 +19,15 @@ export const BootScreen = ({ children }: BootScreenProps) => {
             key="boot-screen"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }} // 300ms fade as per your design spec
-            className="fixed inset-0 z-50 flex items-center justify-center bg-paper text-ink"
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper text-ink"
           >
-            {/* This is a temporary placeholder. 
-              In Step 0.5, we will drop the actual Terminal component here.
-            */}
-            <div className="font-mono text-xl">
-              <span>atharva@home:~$ </span>
-              <span className="animate-blink">█</span>
-            </div>
+            {/* Pass markSequenceComplete instead of markReady */}
+            <Terminal onComplete={markSequenceComplete} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* The actual portfolio mounts behind the boot screen immediately, but remains hidden until finished */}
       <div
         className={`transition-opacity duration-500 h-full w-full ${
           bootState === 'finished' ? 'opacity-100' : 'opacity-0'
