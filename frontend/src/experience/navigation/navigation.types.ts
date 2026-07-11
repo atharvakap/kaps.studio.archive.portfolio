@@ -1,5 +1,6 @@
-// Define the exact IDs your sections will use
-export type SectionId = 'about' | 'work' | 'lab' | 'contact'
+// Define the exact IDs for your new sections
+export type SectionId =
+  'about' | 'skills' | 'experience' | 'projects' | 'certs' | 'education'
 
 export interface NavigationItemData {
   id: SectionId

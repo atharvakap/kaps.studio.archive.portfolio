@@ -5,23 +5,37 @@ export const AboutSection = () => (
   </div>
 )
 
-export const WorkSection = () => (
+export const SkillsSection = () => (
   <div className="flex h-full w-full flex-col items-center justify-center">
-    <h1 className="text-4xl font-bold tracking-tight">Work</h1>
-    <p className="mt-4 text-ink/60">Evidence & Capabilities</p>
+    <h1 className="text-4xl font-bold tracking-tight">Skills</h1>
+    <p className="mt-4 text-ink/60">Technical Capabilities</p>
   </div>
 )
 
-export const LabSection = () => (
+export const ExperienceSection = () => (
   <div className="flex h-full w-full flex-col items-center justify-center">
-    <h1 className="text-4xl font-bold tracking-tight">Lab</h1>
-    <p className="mt-4 text-ink/60">Motion, 3D, and Experiments</p>
+    <h1 className="text-4xl font-bold tracking-tight">Experience</h1>
+    <p className="mt-4 text-ink/60">Professional Journey</p>
   </div>
 )
 
-export const ContactSection = () => (
+export const ProjectsSection = () => (
   <div className="flex h-full w-full flex-col items-center justify-center">
-    <h1 className="text-4xl font-bold tracking-tight">Contact</h1>
-    <p className="mt-4 text-ink/60">Direct Communication Channels</p>
+    <h1 className="text-4xl font-bold tracking-tight">Projects</h1>
+    <p className="mt-4 text-ink/60">Evidence of Execution</p>
+  </div>
+)
+
+export const CertsSection = () => (
+  <div className="flex h-full w-full flex-col items-center justify-center">
+    <h1 className="text-4xl font-bold tracking-tight">Certs & Achievements</h1>
+    <p className="mt-4 text-ink/60">Milestones & Recognition</p>
+  </div>
+)
+
+export const EducationSection = () => (
+  <div className="flex h-full w-full flex-col items-center justify-center">
+    <h1 className="text-4xl font-bold tracking-tight">Education</h1>
+    <p className="mt-4 text-ink/60">Academic Background</p>
   </div>
 )
