@@ -18,7 +18,7 @@ export const NavigationItem = ({ item }: NavigationItemProps) => {
         aria-label={`Navigate to ${item.label} section`}
         aria-current={isActive ? 'page' : undefined}
 
-        whileHover={{ scale: 1.06 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.98 }}
 
         className={`
@@ -49,8 +49,8 @@ export const NavigationItem = ({ item }: NavigationItemProps) => {
           className="relative z-10 block whitespace-nowrap"
           animate={{
             color: isActive
-              ? 'rgba(255, 255, 255, 1)'
-              : 'rgba(255, 255, 255, 0.6)',
+              ? 'rgba(255, 255, 255, 200)'
+              : 'rgba(255, 255, 255, 100)',
           }}
           whileHover={{ color: 'rgba(255, 255, 255, 1)' }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
