@@ -1,0 +1,37 @@
+@theme {
+    --color-glass-base: rgba(0, 0, 0, 0.35);
+
+    --shadow-glass-inner:
+        inset 0 1.5px 8px rgba(0, 0, 0, 0.8),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+
+    /* Lowered the opacity just slightly from 0.15 to 0.12 so more light comes through */
+    --color-slider-base: rgba(255, 255, 255, 0.12);
+
+    --shadow-slider-inner:
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@utility glass-panel {
+    background-color: var(--color-glass-base);
+
+    /* --- THE VIBRANCY MAGIC --- */
+    /* Saturate 180% forces the background colors to pop through the dark tint */
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-glass-inner);
+}
+
+@utility glass-slider {
+    background-color: var(--color-slider-base);
+
+    /* The active slider gets an even stronger saturation (200%) to act as a magnifying highlight */
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-slider-inner);
+}

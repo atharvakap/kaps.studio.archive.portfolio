@@ -12,4 +12,5 @@
 /* 4. Custom Animations */
 @import "./animations.css";
 
-/* Note: glass.css and paper.css can be imported here later */
+/* 3. Materials */
+@import "./glass.css";
