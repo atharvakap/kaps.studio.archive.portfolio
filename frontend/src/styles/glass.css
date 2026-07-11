@@ -1,0 +1,45 @@
+@theme {
+    --color-glass-base: rgba(0, 0, 0, 0.35);
+
+    --shadow-glass-inner:
+        inset 0 1px 8px rgba(0, 0, 0, 0.8),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    /* Slightly boosted bottom reflection on the base */
+
+    /* --- THE PRISM BEVEL MAGIC --- */
+    /* 1. Sharp top-left highlight (direct light source hitting the bevel)
+     2. Softer bottom-right reflection (light bouncing inside the bottom edge)
+     3. Heavy, deep drop shadow to give the block physical weight
+  */
+    --shadow-slider-prism:
+        inset 1px 2px 2px rgba(255, 255, 255, 0.6),
+        inset -1px -2px 4px rgba(255, 255, 255, 0.2),
+        0 8px 16px -2px rgba(0, 0, 0, 0.4);
+}
+
+@utility glass-panel {
+    background-color: var(--color-glass-base);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-glass-inner);
+}
+
+@utility glass-slider {
+    /* Replace the solid background with a diagonal light sweep.
+     This creates the illusion of light entering the top-left and exiting the bottom-right, 
+     giving the center a hollow, transparent thickness.
+  */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.35) 0%,
+            rgba(255, 255, 255, 0.05) 35%,
+            rgba(255, 255, 255, 0.0) 60%,
+            rgba(255, 255, 255, 0.15) 100%);
+
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
+
+    /* A slightly brighter border acts as the outermost edge of the glass block */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: var(--shadow-slider-prism);
+}
