@@ -23,7 +23,18 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = 5
     allowed_mime_types: list[str] = ["image/jpeg", "image/png", "image/webp", "application/pdf"]
 
+    # --- ADDED: Default CORS origin if not specified in .env ---
+    cors_origins: str = "http://localhost:5173"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    @property
+    def backend_cors_origins(self) -> list[str]:
+        """
+        Parses the comma-separated string from the .env into a list for FastAPI.
+        Example: "http://localhost:5173,https://kaps.studio" -> ["http://localhost:5173", "https://kaps.studio"]
+        """
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
     @field_validator("database_url", mode="after")
     @classmethod

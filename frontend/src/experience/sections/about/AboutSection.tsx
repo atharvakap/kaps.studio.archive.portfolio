@@ -1,34 +1,40 @@
 import { motion } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
 import { Portrait } from './Portrait'
+import { fetchProfile } from '../../../services/profile' // Adjust import path as necessary
 
-// 1. Define the exact structure your backend will eventually return
-interface AboutContent {
+// The exact contract mirroring your FastAPI backend
+export interface Profile {
+  id: string
+  name: string
   title: string
-  subtitle: string
-  heading: string
-  paragraphs: string[]
-}
-
-// 2. Create the static fallback data
-const CONTENT: AboutContent = {
-  title: 'About',
-  subtitle: 'Identity & Core Philosophy',
-  heading: 'Engineering. Art. Execution.',
-  paragraphs: [
-    'This space is reserved for your core storytelling. It should explain not just what you do, but how you think, bridging the gap between highly technical backend architecture and creative visual design.',
-    'Notice the line length is strictly constrained. In premium editorial design, lines that are too wide become exhausting to read. This bounding box ensures your words carry weight.',
-    'Later in development, this static placeholder will be replaced by your backend-driven content, seamlessly flowing into this established frontend container.',
-  ],
+  bio: string
+  avatar_url: string | null
+  email: string
 }
 
 export const AboutSection = () => {
-  // In the future, you will fetch this data via TanStack Query:
-  // const { data: content } = useQuery({ queryKey: ['about'], queryFn: fetchAboutContent })
-  const content = CONTENT
+  // Wire up TanStack Query to fetch the data
+  const {
+    data: profile,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['profile'],
+    queryFn: fetchProfile,
+    // FIX: Force the cache to hold this data permanently for the session
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24, // Keep in memory for 24 hours
+  })
+
+  // Safe fallback if profile is null (e.g., empty database)
+  const paragraphs = profile?.bio
+    ? profile.bio.split('\n').filter((p) => p.trim() !== '')
+    : ['Biography data not found. Please seed the database.']
 
   return (
     <section className="h-full w-full flex flex-col items-center justify-start px-6 md:px-12 lg:px-24 pb-24">
-      {/* --- SECTION HEADER --- */}
+      {/* --- SECTION HEADER (Static, loads instantly) --- */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -36,10 +42,10 @@ export const AboutSection = () => {
         className="flex flex-col items-center justify-center text-center mt-20 md:mt-2 mb-12 lg:mb-2"
       >
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-4">
-          {content.title}
+          About
         </h1>
         <h2 className="text-sm md:text-base font-mono uppercase tracking-[0.2em] opacity-60 m-0">
-          {content.subtitle}
+          Identity & Core Philosophy
         </h2>
       </motion.div>
 
@@ -50,18 +56,40 @@ export const AboutSection = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full flex flex-col justify-start max-w-lg mx-auto md:mx-0 md:pt-4 order-2 md:order-1 text-center md:text-left"
+          className="w-full flex flex-col justify-start max-w-lg mx-auto md:mx-0 md:pt-1 order-2 md:order-1 text-center md:text-left"
         >
-          <h3 className="text-2xl md:text-3xl font-medium tracking-tight mb-6">
-            {content.heading}
-          </h3>
-
-          <div className="space-y-6 text-base md:text-lg opacity-80 leading-relaxed">
-            {/* 3. Dynamically map over the paragraphs */}
-            {content.paragraphs.map((text, index) => (
-              <p key={index}>{text}</p>
-            ))}
-          </div>
+          {isLoading ? (
+            // Skeleton Loading State for Text
+            <div className="animate-pulse space-y-6 w-full flex flex-col items-center md:items-start">
+              <div className="h-8 md:h-10 bg-black/10 dark:bg-white/10 rounded-md w-3/4 mb-4"></div>
+              <div className="w-full space-y-3">
+                <div className="h-4 bg-black/5 dark:bg-white/5 rounded w-full"></div>
+                <div className="h-4 bg-black/5 dark:bg-white/5 rounded w-full"></div>
+                <div className="h-4 bg-black/5 dark:bg-white/5 rounded w-5/6"></div>
+              </div>
+              <div className="w-full space-y-3 pt-4">
+                <div className="h-4 bg-black/5 dark:bg-white/5 rounded w-full"></div>
+                <div className="h-4 bg-black/5 dark:bg-white/5 rounded w-4/5"></div>
+              </div>
+            </div>
+          ) : isError ? (
+            // Error State Fallback
+            <div className="text-red-500/80 font-mono text-sm uppercase tracking-widest text-center md:text-left">
+              [ System Error: Unable to load profile data ]
+            </div>
+          ) : (
+            // Success State
+            <>
+              <h3 className="text-2xl md:text-3xl font-medium tracking-tight mb-6">
+                {profile?.title}
+              </h3>
+              <div className="space-y-6 text-base md:text-lg opacity-80 leading-relaxed">
+                {paragraphs.map((text, index) => (
+                  <p key={index}>{text}</p>
+                ))}
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* --- PORTRAIT COMPONENT --- */}
@@ -71,7 +99,15 @@ export const AboutSection = () => {
           transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="w-full flex flex-col items-center justify-start order-1 md:order-2"
         >
-          <Portrait />
+          {isLoading ? (
+            // Skeleton Loading State for Portrait
+            <div className="relative w-full max-w-sm aspect-square mx-auto mt-8 md:mt-12">
+              <div className="absolute inset-0 rounded-full bg-black/5 dark:bg-white/5 animate-pulse shadow-inner"></div>
+            </div>
+          ) : (
+            // Success State
+            <Portrait avatarUrl={profile?.avatar_url} />
+          )}
         </motion.div>
       </div>
     </section>
