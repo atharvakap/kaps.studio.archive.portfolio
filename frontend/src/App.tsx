@@ -37,7 +37,7 @@ function App() {
         // 3. Preload the backend image, or fallback to local if null
         const imageToLoad = profile?.avatar_url || '/portrait.png'
         await preloadImage(imageToLoad)
-      } catch (error) {
+      } catch {
         // 4. If the FastAPI backend is down, still preload the fallback image
         await preloadImage('/portrait.png')
       }
