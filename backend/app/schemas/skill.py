@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict
 class SkillBase(BaseModel):
     name: str
     category: str
-    proficiency: str
+    proficiency: int
 
 
 class SkillCreate(SkillBase):
@@ -18,13 +18,13 @@ class SkillCreate(SkillBase):
 class SkillUpdate(BaseModel):
     name: Optional[str] = None
     category: Optional[str] = None
-    proficiency: Optional[str] = None
+    proficiency: Optional[int] = None
 
 
 class SkillRead(SkillBase):
     id: UUID
-    created_date: datetime
-    updated_date: datetime
+    created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
