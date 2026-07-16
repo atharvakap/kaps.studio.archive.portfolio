@@ -93,7 +93,7 @@ export const SkillsSection = () => {
                   </div>
 
                   {/* APPLIED: overflow-y-auto & glass-scrollbar directly on the skills container */}
-                  <div className="flex-1 overflow-y-auto glass-scrollbar relative min-h-0 py-2">
+                  <div className="flex-1 overflow-y-auto px-3 glass-scrollbar relative min-h-0 py-2">
                     <motion.div
                       className="flex flex-wrap gap-4 pb-12"
                       variants={containerVariants}
