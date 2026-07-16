@@ -1,5 +1,5 @@
 import type { RefObject } from 'react'
-import { motion, type Variants } from 'framer-motion' // <-- Imported Variants type
+import { motion, type Variants, useReducedMotion } from 'framer-motion'
 import type { Experience } from '../types'
 import { ExperienceCard } from './ExperienceCard'
 
@@ -11,7 +11,6 @@ interface ExperienceListProps {
   activeIndex: number
 }
 
-// Strictly typed as Variants
 const listVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
@@ -20,7 +19,6 @@ const listVariants: Variants = {
   },
 }
 
-// Strictly typed as Variants
 const spineVariants: Variants = {
   hidden: { height: 0, opacity: 0 },
   show: {
@@ -37,10 +35,15 @@ export const ExperienceList = ({
   containerRef,
   activeIndex,
 }: ExperienceListProps) => {
-  // Restored actual JSX instead of pseudo-code
+  // Phase 9: Respect user OS preferences for reduced motion
+  const prefersReducedMotion = useReducedMotion()
+
   if (isLoading) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-2 lg:pr-4">
+      <div
+        className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-2 lg:pr-4"
+        aria-busy="true"
+      >
         {[1, 2, 3].map((i) => (
           <div
             key={i}
@@ -53,7 +56,10 @@ export const ExperienceList = ({
 
   if (isError) {
     return (
-      <div className="flex-1 flex items-center justify-center p-6 text-center">
+      <div
+        className="flex-1 flex items-center justify-center p-6 text-center"
+        role="alert"
+      >
         <p className="text-sm font-medium text-red-500/80">
           Unable to load experiences.
         </p>
@@ -72,18 +78,19 @@ export const ExperienceList = ({
   return (
     <motion.div
       ref={containerRef}
-      variants={listVariants}
+      variants={prefersReducedMotion ? {} : listVariants} // Disable stagger if requested
       initial="hidden"
       animate="show"
-      className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-6 pl-2 relative min-h-0"
+      role="list" // Phase 9: Semantic list for screen readers
+      aria-label="Professional Experience Timeline"
+      className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-6 pl-2 relative min-h-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/10 rounded-2xl"
+      tabIndex={0} // Allows keyboard users to scroll the container
     >
       {experiences.map((exp, index) => {
         const isCurrent = exp.isCurrent
-        const isActive = index === activeIndex // <-- Now we use activeIndex!
+        const isActive = index === activeIndex
 
         const dotColor = isCurrent ? 'bg-[#FF6B00]' : 'bg-[#A8B1FF]'
-
-        // The active scrolled item gets a much stronger ring glow
         const ringColor = isActive
           ? isCurrent
             ? 'ring-[#FF6B00]/40'
@@ -97,23 +104,28 @@ export const ExperienceList = ({
             key={exp.id}
             className="flex gap-4 lg:gap-8 w-full relative pr-2"
           >
-            {/* LEFT: Dates Column */}
-            <div className="hidden lg:flex flex-col items-start w-20 shrink-0 text-xs text-(--text) opacity-60 pt-7">
+            <div
+              className="hidden lg:flex flex-col items-start w-20 shrink-0 text-xs text-(--text) opacity-60 pt-7"
+              aria-hidden="true"
+            >
               <span>{exp.formattedStartDate}</span>
               <span>{exp.formattedEndDate}</span>
             </div>
 
-            {/* MIDDLE: Timeline Spine & Dot */}
-            <div className="hidden lg:flex flex-col items-center relative w-6">
-              {/* Animated Line */}
+            <div
+              className="flex flex-col items-center relative w-6 shrink-0"
+              aria-hidden="true"
+            >
               <motion.div
-                variants={spineVariants}
+                variants={prefersReducedMotion ? {} : spineVariants}
                 className={`absolute top-0 w-0.5 bg-black/5 dark:bg-black/10 ${index === experiences.length - 1 ? 'h-9' : 'bottom-0'}`}
               />
-
-              {/* Dot with spring entrance and dynamic ring */}
               <motion.div
-                initial={{ scale: 0, opacity: 0 }}
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 1, scale: 1 }
+                    : { scale: 0, opacity: 0 }
+                }
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{
                   type: 'spring',
@@ -125,11 +137,14 @@ export const ExperienceList = ({
               />
             </div>
 
-            {/* RIGHT: The Experience Card */}
-            <div className="flex-1 pb-6 w-full min-w-0">
-              <div className="lg:hidden text-xs text-(--text) opacity-60 mb-2 mt-4">
+            <div className="flex-1 pb-6 pt-4 w-full min-w-0">
+              <div
+                className="lg:hidden text-[10px] font-mono text-(--text) opacity-60 mb-2 mt-7"
+                aria-hidden="true"
+              >
                 {exp.formattedStartDate} — {exp.formattedEndDate}
               </div>
+              {/* The heavily optimized, accessible card */}
               <ExperienceCard experience={exp} index={index} />
             </div>
           </div>
