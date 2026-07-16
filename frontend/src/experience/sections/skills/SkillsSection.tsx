@@ -30,7 +30,7 @@ export const SkillsSection = () => {
     <section className="relative h-full w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pb-8">
       {/* HEADER SECTION */}
       <div className="flex flex-col items-center text-center max-w-2xl mb-8 space-y-4 shrink-0">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-2">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-2 opacity-70">
           Skills
         </h1>
         <h2 className="text-sm md:text-base font-mono uppercase tracking-[0.2em] opacity-60 m-0">
