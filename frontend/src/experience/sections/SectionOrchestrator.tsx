@@ -5,9 +5,10 @@ import { AboutSection } from './about/AboutSection'
 // 1. IMPORT THE REAL COMPONENT HERE
 import { SkillsSection } from './skills/SkillsSection'
 
+import { ExperienceSection } from './experience'
+
 // 2. REMOVE SkillsSection FROM THE PLACEHOLDERS
 import {
-  ExperienceSection,
   ProjectsSection,
   CertsSection,
   EducationSection,
