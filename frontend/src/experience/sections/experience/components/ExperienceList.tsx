@@ -1,4 +1,5 @@
 import type { RefObject } from 'react'
+import { motion, type Variants } from 'framer-motion' // <-- Imported Variants type
 import type { Experience } from '../types'
 import { ExperienceCard } from './ExperienceCard'
 
@@ -10,12 +11,33 @@ interface ExperienceListProps {
   activeIndex: number
 }
 
+// Strictly typed as Variants
+const listVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.4 },
+  },
+}
+
+// Strictly typed as Variants
+const spineVariants: Variants = {
+  hidden: { height: 0, opacity: 0 },
+  show: {
+    height: '100%',
+    opacity: 1,
+    transition: { duration: 1, ease: 'easeInOut' },
+  },
+}
+
 export const ExperienceList = ({
   experiences,
   isLoading,
   isError,
   containerRef,
+  activeIndex,
 }: ExperienceListProps) => {
+  // Restored actual JSX instead of pseudo-code
   if (isLoading) {
     return (
       <div className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-2 lg:pr-4">
@@ -48,18 +70,33 @@ export const ExperienceList = ({
   }
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className="flex-1 w-full flex flex-col overflow-y-auto glass-scrollbar pr-2 lg:pr-4 relative min-h-0"
+      variants={listVariants}
+      initial="hidden"
+      animate="show"
+      className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-6 pl-2 relative min-h-0"
     >
       {experiences.map((exp, index) => {
         const isCurrent = exp.isCurrent
-        // Match exact target image colors
+        const isActive = index === activeIndex // <-- Now we use activeIndex!
+
         const dotColor = isCurrent ? 'bg-[#FF6B00]' : 'bg-[#A8B1FF]'
-        const ringColor = isCurrent ? 'ring-[#FF6B00]/20' : 'ring-[#A8B1FF]/20'
+
+        // The active scrolled item gets a much stronger ring glow
+        const ringColor = isActive
+          ? isCurrent
+            ? 'ring-[#FF6B00]/40'
+            : 'ring-[#A8B1FF]/40'
+          : isCurrent
+            ? 'ring-[#FF6B00]/10'
+            : 'ring-[#A8B1FF]/10'
 
         return (
-          <div key={exp.id} className="flex gap-4 lg:gap-8 w-full relative p-6">
+          <div
+            key={exp.id}
+            className="flex gap-4 lg:gap-8 w-full relative pr-2"
+          >
             {/* LEFT: Dates Column */}
             <div className="hidden lg:flex flex-col items-start w-20 shrink-0 text-xs text-(--text) opacity-60 pt-7">
               <span>{exp.formattedStartDate}</span>
@@ -68,20 +105,28 @@ export const ExperienceList = ({
 
             {/* MIDDLE: Timeline Spine & Dot */}
             <div className="hidden lg:flex flex-col items-center relative w-6">
-              {/* Continuous vertical line (stops at the last dot) */}
-              <div
-                className={`absolute top-0 w-0.5 bg-black/5 dark:bg-white/10 ${index === experiences.length - 1 ? 'h-9' : 'bottom-0'}`}
+              {/* Animated Line */}
+              <motion.div
+                variants={spineVariants}
+                className={`absolute top-0 w-0.5 bg-black/5 dark:bg-black/10 ${index === experiences.length - 1 ? 'h-9' : 'bottom-0'}`}
               />
 
-              {/* The glowing dot */}
-              <div
-                className={`relative mt-8 w-3 h-3 rounded-full ${dotColor} ring-[5px] ${ringColor} z-10`}
+              {/* Dot with spring entrance and dynamic ring */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 20,
+                  delay: 0.5 + index * 0.15,
+                }}
+                className={`relative mt-8 w-3 h-3 rounded-full ${dotColor} ring-[5px] ${ringColor} transition-all duration-300 z-10`}
               />
             </div>
 
             {/* RIGHT: The Experience Card */}
             <div className="flex-1 pb-6 w-full min-w-0">
-              {/* Mobile dates */}
               <div className="lg:hidden text-xs text-(--text) opacity-60 mb-2 mt-4">
                 {exp.formattedStartDate} — {exp.formattedEndDate}
               </div>
@@ -90,6 +135,6 @@ export const ExperienceList = ({
           </div>
         )
       })}
-    </div>
+    </motion.div>
   )
 }
