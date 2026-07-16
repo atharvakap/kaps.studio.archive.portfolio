@@ -9,7 +9,7 @@ from app.schemas.experience import ExperienceCreate, ExperienceUpdate, Experienc
 from app.services.experience import ExperienceService
 
 router = APIRouter(
-    prefix="/api/experience",
+    prefix="/experience",
     tags=["Experience"]
 )
 
@@ -17,7 +17,8 @@ def get_experience_service(db: AsyncSession = Depends(get_db)) -> ExperienceServ
     """Dependency to inject the ExperienceService."""
     return ExperienceService(db)
 
-@router.get("/", response_model=List[ExperienceResponse], status_code=status.HTTP_200_OK)
+# --- FIXED: Removed trailing slash ("/" -> "") ---
+@router.get("", response_model=List[ExperienceResponse], status_code=status.HTTP_200_OK)
 async def get_all_experiences(service: ExperienceService = Depends(get_experience_service)):
     """Retrieve all experience records."""
     return await service.get_all()
@@ -36,7 +37,8 @@ async def get_experience(
         )
     return experience
 
-@router.post("/", response_model=ExperienceResponse, status_code=status.HTTP_201_CREATED)
+# --- FIXED: Removed trailing slash ("/" -> "") ---
+@router.post("", response_model=ExperienceResponse, status_code=status.HTTP_201_CREATED)
 async def create_experience(
     data: ExperienceCreate, 
     service: ExperienceService = Depends(get_experience_service)

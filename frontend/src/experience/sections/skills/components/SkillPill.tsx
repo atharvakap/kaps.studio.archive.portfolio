@@ -47,7 +47,7 @@ export const SkillPill = ({ skill }: SkillPillProps) => {
         className={`w-1 h-1 rounded-full ${getProficiencyStyle(skill.proficiency)}`}
       />
 
-      <span className="text-xs font-light text-(--text) tracking-wide group-hover:text-(--text-h) transition-colors">
+      <span className="text-s font-light text-(--text) tracking-wide group-hover:text-(--text-h) transition-colors">
         {skill.name}
       </span>
 
