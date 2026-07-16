@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { GroupedCategory } from '../types'
 import { categoryIconMap } from '../constants/categoryIcons'
 
@@ -13,7 +14,8 @@ export const CategoryList = ({
   onSelect,
 }: CategoryListProps) => {
   return (
-    <div className="flex flex-col gap-3 w-full p-6 h-full overflow-y-auto no-scrollbar">
+    // SWAPPED: 'no-scrollbar' is now 'glass-scrollbar'
+    <div className="flex flex-row lg:flex-col gap-2 w-full p-4 lg:p-5 h-auto lg:h-full overflow-x-auto lg:overflow-y-auto lg:overflow-x-hidden glass-scrollbar relative items-center lg:items-stretch">
       {categories.map((group) => {
         const Icon =
           categoryIconMap[group.category] || categoryIconMap['default']
@@ -23,37 +25,44 @@ export const CategoryList = ({
           <button
             key={group.category}
             onClick={() => onSelect(group.category)}
-            className={`
-              group relative w-full flex items-center justify-between p-4 rounded-2xl
-              transition-all duration-300 ease-out outline-none cursor-pointer
-              ${
-                isSelected
-                  ? /* Using our new shadow-glass-glow from the theme */
-                    'bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 shadow-glass-glow scale-[1.02]'
-                  : 'bg-transparent border border-transparent hover:bg-white/10 dark:hover:bg-white/5 hover:border-white/20 hover:scale-[1.01]'
-              }
-            `}
+            className="group relative shrink-0 w-auto lg:w-full flex items-center justify-between p-3.5 rounded-2xl transition-all duration-300 ease-out outline-none cursor-pointer hover:bg-black/5 dark:hover:bg-white/5"
           >
-            <div className="flex items-center gap-4">
+            {isSelected && (
+              <motion.div
+                layoutId="category-active-slider"
+                className="absolute inset-0 bg-white/80 dark:bg-white/10 border border-black/5 dark:border-white/10 shadow-sm rounded-xl"
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              />
+            )}
+
+            <div className="flex items-center gap-4 relative z-10 pr-4 lg:pr-0">
               <div
-                className={`
-                p-2.5 rounded-xl transition-colors duration-300
-                ${isSelected ? 'bg-(--accent) text-white' : 'bg-black/5 dark:bg-white/5 text-(--text)'}
-                group-hover:bg-(--accent) group-hover:text-white
-              `}
+                className={`p-2.5 rounded-xl transition-colors duration-300 group-hover:bg-(--accent) group-hover:text-black ${
+                  isSelected
+                    ? 'bg-(--accent) text-black opacity-70 shadow-md'
+                    : 'bg-black/5 dark:bg-white/5 text-black/80 dark:text-black/80'
+                }`}
               >
                 <Icon size={20} strokeWidth={1.5} />
               </div>
+
               <span
-                className={`font-medium transition-colors ${isSelected ? 'text-(--text-h)' : 'text-(--text)'}`}
+                className={`font-medium whitespace-nowrap transition-colors ${
+                  isSelected
+                    ? 'text-black dark:text-black opacity-70'
+                    : 'text-(--text) opacity-50'
+                }`}
               >
                 {group.category}
               </span>
             </div>
 
-            {/* Skill Count Indicator */}
             <span
-              className={`text-sm font-mono transition-opacity ${isSelected ? 'opacity-100 text-(--text-h)' : 'opacity-40 group-hover:opacity-100 text-(--text)'}`}
+              className={`text-sm font-mono transition-colors relative z-10 ${
+                isSelected
+                  ? 'text-black dark:text-black font-semibold opacity-60'
+                  : 'opacity-50 group-hover:opacity-100 text-(--text)'
+              }`}
             >
               {group.count}
             </span>
