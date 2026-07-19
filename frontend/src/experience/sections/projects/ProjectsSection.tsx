@@ -66,7 +66,7 @@ export const ProjectsSection = () => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="shrink-0 flex flex-col items-center text-center max-w-2xl px-4 z-10"
       >
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-800 mb-1">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-800 mb-1 opacity-80">
           Projects
         </h1>
         <h2 className="text-xs md:text-sm font-medium text-slate-500 mb-3">
