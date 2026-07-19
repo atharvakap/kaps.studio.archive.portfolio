@@ -7,9 +7,10 @@ import { SkillsSection } from './skills/SkillsSection'
 
 import { ExperienceSection } from './experience'
 
+import { ProjectsSection } from './projects/ProjectsSection'
+
 // 2. REMOVE SkillsSection FROM THE PLACEHOLDERS
 import {
-  ProjectsSection,
   CertsSection,
   EducationSection,
 } from './SectionPlaceholders'

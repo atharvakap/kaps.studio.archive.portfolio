@@ -9,7 +9,7 @@ from app.models.mixins import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.project_skill import ProjectSkill
-
+    from app.models.skill import Skill # Add this for type checking
 
 class Project(Base, TimestampMixin):
     __tablename__ = "projects"
@@ -23,7 +23,12 @@ class Project(Base, TimestampMixin):
     live_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     featured: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    # Typo fixed: projects_skills -> project_skills
+    # Existing junction relationship
     project_skills: Mapped[list["ProjectSkill"]] = relationship(
         "ProjectSkill", back_populates="project", cascade="all, delete-orphan"
+    )
+
+    # ADD THIS: Direct path to the actual skills using the secondary table
+    skills: Mapped[list["Skill"]] = relationship(
+        "Skill", secondary="project_skills", viewonly=True
     )
