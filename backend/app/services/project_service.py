@@ -6,7 +6,6 @@ from sqlalchemy.orm import selectinload
 
 from app.exceptions import NotFoundError
 from app.models.project import Project
-from app.models.project_skill import ProjectSkill
 
 
 class ProjectService:
@@ -15,7 +14,8 @@ class ProjectService:
 
     async def get_projects(self) -> Sequence[Project]:
         stmt = select(Project).options(
-            selectinload(Project.project_skills).selectinload(ProjectSkill.skill)
+            # FIX: Eager load the direct skills relationship
+            selectinload(Project.skills)
         )
         result = await self.session.execute(stmt)
         return result.scalars().all()
@@ -24,7 +24,10 @@ class ProjectService:
         stmt = (
             select(Project)
             .where(Project.featured)
-            .options(selectinload(Project.project_skills).selectinload(ProjectSkill.skill))
+            .options(
+                # FIX: Eager load the direct skills relationship
+                selectinload(Project.skills)
+            )
         )
         result = await self.session.execute(stmt)
         return result.scalars().all()
@@ -33,7 +36,10 @@ class ProjectService:
         stmt = (
             select(Project)
             .where(Project.slug == slug)
-            .options(selectinload(Project.project_skills).selectinload(ProjectSkill.skill))
+            .options(
+                # FIX: Eager load the direct skills relationship
+                selectinload(Project.skills)
+            )
         )
         result = await self.session.execute(stmt)
 
