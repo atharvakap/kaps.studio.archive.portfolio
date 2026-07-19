@@ -10,7 +10,7 @@ import { ExperienceSection } from './experience'
 import { ProjectsSection } from './projects/ProjectsSection'
 
 // 2. REMOVE SkillsSection FROM THE PLACEHOLDERS
-import { TestimonialSection } from './SectionPlaceholders'
+import { TestimonialsSection } from './testimonials/TestimonialsSection'
 
 export const SectionOrchestrator = () => {
   const { activeSection } = useNavigation()
@@ -26,7 +26,7 @@ export const SectionOrchestrator = () => {
       case 'projects':
         return <ProjectsSection />
       case 'testimonials':
-        return <TestimonialSection />
+        return <TestimonialsSection />
       default:
         return <AboutSection />
     }
