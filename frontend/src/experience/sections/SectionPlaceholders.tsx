@@ -26,16 +26,9 @@ export const ProjectsSection = () => (
   </div>
 )
 
-export const CertsSection = () => (
+export const TestimonialSection = () => (
   <div className="flex h-full w-full flex-col items-center justify-center">
-    <h1 className="text-4xl font-bold tracking-tight">Certs & Achievements</h1>
-    <p className="mt-4 text-ink/60">Milestones & Recognition</p>
-  </div>
-)
-
-export const EducationSection = () => (
-  <div className="flex h-full w-full flex-col items-center justify-center">
-    <h1 className="text-4xl font-bold tracking-tight">Education</h1>
-    <p className="mt-4 text-ink/60">Academic Background</p>
+    <h1 className="text-4xl font-bold tracking-tight">Testimonials</h1>
+    <p className="mt-4 text-ink/60">Testimonials</p>
   </div>
 )

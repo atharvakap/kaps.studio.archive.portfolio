@@ -5,6 +5,5 @@ export const NAVIGATION_ITEMS: NavigationItemData[] = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'certs', label: 'Certs & Achievements' },
-  { id: 'education', label: 'Education' },
+  { id: 'testimonials', label: 'Testimonials' }
 ]
