@@ -1,21 +1,22 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigation } from '@/experience/navigation'
 import { AboutSection } from './about/AboutSection'
-
-// 1. IMPORT THE REAL COMPONENT HERE
 import { SkillsSection } from './skills/SkillsSection'
-
 import { ExperienceSection } from './experience'
-
 import { ProjectsSection } from './projects/ProjectsSection'
-
-// 2. REMOVE SkillsSection FROM THE PLACEHOLDERS
 import { TestimonialsSection } from './testimonials/TestimonialsSection'
+import { VirtualMeSection } from './virtual-me/VirtualMeSection' // <-- IMPORT THE REAL VIRTUAL ME SECTION
 
 export const SectionOrchestrator = () => {
-  const { activeSection } = useNavigation()
+  const { activeSection, isVirtualMeActive } = useNavigation()
 
   const renderSection = () => {
+    // 1. Intercept for Virtual Me chat interface
+    if (isVirtualMeActive) {
+      return <VirtualMeSection />
+    }
+
+    // 2. Standard Portfolio Sections
     switch (activeSection) {
       case 'about':
         return <AboutSection />
@@ -32,11 +33,13 @@ export const SectionOrchestrator = () => {
     }
   }
 
+  const animationKey = isVirtualMeActive ? 'virtual-me' : activeSection
+
   return (
     <main className="relative h-full w-full overflow-hidden text-ink">
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeSection}
+          key={animationKey}
           initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
