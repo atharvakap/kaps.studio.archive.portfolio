@@ -9,7 +9,6 @@ interface ResumeCardProps {
 }
 
 export const ResumeCard = ({
-  title,
   url,
   version = 'Latest',
 }: ResumeCardProps) => {
@@ -28,7 +27,7 @@ export const ResumeCard = ({
         </div>
         <div className="truncate">
           <h4 className="text-sm font-semibold text-slate-800 truncate">
-            {title}
+            Atharva_Kapile
           </h4>
           <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">
             Version {version} • PDF
