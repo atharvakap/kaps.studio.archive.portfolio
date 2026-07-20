@@ -79,8 +79,43 @@ async def generate_response_stream(
                 full_assistant_response += chunk
                 yield chunk
 
-        # 9. Persist the fully compiled Assistant message to the database
-        await chat_service.add_message(session, thread_id, MessageRole.assistant, full_assistant_response)
+        # 9. Check if the resume tool was triggered during the agent execution
+        tool_data = None
+        for message in result.all_messages():
+            if hasattr(message, "parts"):
+                for part in message.parts:
+                    if (
+                        part.part_kind == "tool-return"
+                        and isinstance(part.content, dict)
+                        and part.content.get("type") == "resume"
+                    ):
+                        tool_data = part.content
+
+        # 10. Persist the fully compiled Assistant message to the database with proper typing & metadata
+        if tool_data:
+            await chat_service.add_message(
+                session=session,
+                thread_id=thread_id,
+                role=MessageRole.assistant,
+                content="Here is my latest resume:",
+                message_type="attachment",
+                metadata={
+                    "type": "resume",
+                    "title": tool_data["title"],
+                    "url": tool_data["url"],
+                    "version": tool_data["version"]
+                }
+            )
+        else:
+            await chat_service.add_message(
+                session=session, 
+                thread_id=thread_id, 
+                role=MessageRole.assistant, 
+                content=full_assistant_response,
+                message_type="text",
+                metadata=None
+            )
+            
         logger.info("virtual_me_streaming_completed")
 
     except Exception as e:

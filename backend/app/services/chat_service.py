@@ -62,9 +62,9 @@ async def add_message(
     role: MessageRole, 
     content: str,
     message_type: str = "text",
-    metadata: dict = None
+    metadata: dict | None = None
 ) -> ChatMessage:
-    # 1. Insert the message with the new rich content fields
+    # 1. Insert the message with the rich content and metadata support
     message = ChatMessage(
         thread_id=thread_id, 
         role=role, 

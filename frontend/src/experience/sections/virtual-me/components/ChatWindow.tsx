@@ -9,6 +9,9 @@ import type {
 } from '../services/virtualMeService'
 import { ResumeCard } from './ResumeCard'
 import { ChatInput } from './ChatInput'
+import { SuggestedQuestions } from './SuggestedQuestions'
+import { MessageToolbar } from './MessageToolbar'
+import { ChatSkeleton } from './ChatSkeleton'
 
 interface ChatWindowProps {
   setIsSidebarOpen: (isOpen: boolean) => void
@@ -35,8 +38,17 @@ export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
     sendMessage(text)
   }
 
+  // Finds the last user message and resends it to regenerate the AI response
+  const handleRegenerate = () => {
+    if (isSendingMessage) return
+    const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user')
+    if (lastUserMsg) {
+      sendMessage(lastUserMsg.content)
+    }
+  }
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-white/20 relative min-w-0">
+    <div className="flex-1 flex flex-col h-full bg-white/20 relative min-w-0 overflow-hidden">
       <header className="h-14 border-b border-white/20 flex items-center px-4 md:px-6 backdrop-blur-xs shrink-0 z-10">
         <button
           onClick={() => setIsSidebarOpen(true)}
@@ -49,31 +61,31 @@ export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
         </h2>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-none flex flex-col">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 space-y-6 scrollbar-none flex flex-col">
         {isLoadingMessages ? (
-          <div className="flex-1 flex items-center justify-center">
-            <span className="text-sm font-mono text-slate-400 animate-pulse">
-              Loading messages...
-            </span>
-          </div>
+          <ChatSkeleton />
         ) : messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center opacity-70">
+          <div className="flex-1 flex flex-col items-center justify-center opacity-100 animate-in fade-in duration-700">
             <div className="w-16 h-16 rounded-full bg-linear-to-br from-[#FF6B00]/20 to-orange-500/20 flex items-center justify-center mb-4">
               <span className="text-[#FF6B00] text-xl font-bold">AK</span>
             </div>
-            <p className="text-slate-600 text-sm font-medium">
+            <p className="text-slate-600 text-sm font-medium mb-6 text-center px-4">
               Ask me anything about Atharva's experience or projects!
             </p>
+
+            {/* Suggested Starter Prompts */}
+            <SuggestedQuestions onSelect={handleSend} />
           </div>
         ) : (
-          messages.map((msg: ChatMessage) => {
+          messages.map((msg: ChatMessage, index: number) => {
             // Type cast metadata safely
             const metadata = msg.metadata as AttachmentMetadata | undefined
+            const isLastMessage = index === messages.length - 1
 
             return (
               <div
                 key={msg.id}
-                className={`flex gap-4 max-w-3xl w-full ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}
+                className={`flex gap-4 max-w-3xl w-full min-w-0 ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
@@ -87,28 +99,46 @@ export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
                   </span>
                 </div>
 
-                <div
-                  className={`px-4 py-3 rounded-2xl shadow-sm border ${
-                    msg.role === 'user'
-                      ? 'bg-white/70 backdrop-blur-xs border-white/60 rounded-tr-none'
-                      : 'bg-white/90 border-white/80 rounded-tl-none'
-                  }`}
-                >
-                  <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {msg.content}
-                    </ReactMarkdown>
+                <div className="flex flex-col max-w-[calc(100%-3rem)] min-w-0">
+                  <div
+                    className={`px-4 py-3 rounded-2xl shadow-sm border break-words overflow-hidden ${
+                      msg.role === 'user'
+                        ? 'bg-white/70 backdrop-blur-xs border-white/60 rounded-tr-none'
+                        : 'bg-white/90 border-white/80 rounded-tl-none'
+                    }`}
+                  >
+                    <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 break-words overflow-hidden">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.content}
+                      </ReactMarkdown>
 
-                    {/* Render Attachment if present */}
-                    {msg.message_type === 'attachment' &&
-                      metadata?.type === 'resume' && (
-                        <ResumeCard
-                          title={metadata.title}
-                          url={metadata.url}
-                          version={metadata.version}
-                        />
-                      )}
+                      {/* Render Attachment if present */}
+                      {msg.message_type === 'attachment' &&
+                        metadata?.type === 'resume' && (
+                          <div className="mt-3 w-full overflow-hidden">
+                            <ResumeCard
+                              title={metadata.title}
+                              url={metadata.url}
+                              version={metadata.version}
+                            />
+                          </div>
+                        )}
+                    </div>
                   </div>
+
+                  {/* Message Toolbar for Assistant Messages */}
+                  {msg.role === 'assistant' && (
+                    <MessageToolbar
+                      content={msg.content}
+                      isLast={isLastMessage}
+                      onRegenerate={handleRegenerate}
+                      onFeedback={(type) =>
+                        console.log(
+                          `Feedback recorded: ${type} for message ${msg.id}`
+                        )
+                      }
+                    />
+                  )}
                 </div>
               </div>
             )
