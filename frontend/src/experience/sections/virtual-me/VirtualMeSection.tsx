@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChatSidebar } from './components/ChatSidebar'
 import { ChatWindow } from './components/ChatWindow'
+import { VisitorModal } from './components/VisitorModal'
 import { useChatManager } from './hooks/useChatManager'
 
 export const VirtualMeSection = () => {
@@ -13,10 +14,19 @@ export const VirtualMeSection = () => {
     setActiveThreadId,
     startNewThread,
     isCreatingThread,
+    isVisitorModalOpen,
+    registerVisitor,
+    messages,
+    isLoadingMessages,
+    sendMessage,
+    isSendingMessage,
   } = useChatManager()
 
   return (
-    <section className="h-full w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 pt-2">
+    <section className="h-full w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 pt-2 relative">
+      {/* Visitor Onboarding Modal */}
+      <VisitorModal isOpen={isVisitorModalOpen} onSubmit={registerVisitor} />
+
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -34,7 +44,14 @@ export const VirtualMeSection = () => {
           isCreating={isCreatingThread}
           visitorId={visitorId}
         />
-        <ChatWindow setIsSidebarOpen={setIsSidebarOpen} />
+        <ChatWindow
+          setIsSidebarOpen={setIsSidebarOpen}
+          messages={messages}
+          isLoadingMessages={isLoadingMessages}
+          sendMessage={sendMessage}
+          isSendingMessage={isSendingMessage}
+          activeThreadId={activeThreadId}
+        />
       </motion.div>
     </section>
   )

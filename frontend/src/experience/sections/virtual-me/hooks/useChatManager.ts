@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   createVisitor,
@@ -12,34 +12,55 @@ import type { ChatMessage, ChatThread } from '../services/virtualMeService'
 export const useChatManager = () => {
   const queryClient = useQueryClient()
 
+  // Visitor identity state stored in sessionStorage
   const [visitorId, setVisitorId] = useState<string | null>(() =>
     sessionStorage.getItem('virtual_me_visitor_id')
   )
+  const [visitorName, setVisitorName] = useState<string | null>(() =>
+    sessionStorage.getItem('virtual_me_visitor_name')
+  )
+  const [visitorEmail, setVisitorEmail] = useState<string | null>(() =>
+    sessionStorage.getItem('virtual_me_visitor_email')
+  )
+
+  // Control modal visibility if name/email are missing
+  const [isVisitorModalOpen, setIsVisitorModalOpen] = useState<boolean>(
+    !sessionStorage.getItem('virtual_me_visitor_id') ||
+      !sessionStorage.getItem('virtual_me_visitor_name')
+  )
+
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null)
 
-  // 1. Initialize visitor session
-  useEffect(() => {
-    if (!visitorId) {
-      createVisitor()
-        .then((visitor) => {
-          sessionStorage.setItem('virtual_me_visitor_id', visitor.id)
-          setVisitorId(visitor.id)
-        })
-        .catch(console.error)
-    }
-  }, [visitorId])
+  // Function to register or login a visitor with Name and Email
+  const registerVisitor = async (name: string, email: string) => {
+    try {
+      const visitor = await createVisitor(name, email)
+      sessionStorage.setItem('virtual_me_visitor_id', visitor.id)
+      sessionStorage.setItem('virtual_me_visitor_name', name)
+      sessionStorage.setItem('virtual_me_visitor_email', email)
 
-  // 2. Fetch all threads for the visitor
+      setVisitorId(visitor.id)
+      setVisitorName(name)
+      setVisitorEmail(email)
+      setIsVisitorModalOpen(false)
+
+      // Invalidate and refetch threads for the newly registered visitor
+      queryClient.invalidateQueries({ queryKey: ['chat-threads', visitor.id] })
+    } catch (error) {
+      console.error('Failed to create visitor session:', error)
+    }
+  }
+
+  // 2. Fetch all threads for the authenticated visitor
   const { data: threads = [], isLoading: isLoadingThreads } = useQuery<
     ChatThread[]
   >({
     queryKey: ['chat-threads', visitorId],
     queryFn: () => fetchThreads(visitorId!),
-    enabled: !!visitorId,
+    enabled: !!visitorId && !isVisitorModalOpen,
   })
 
-  // Ensure activeThreadId defaults to the top thread if none is selected,
-  // but respects explicit selection when clicking history items or new chat.
+  // Ensure activeThreadId defaults to the top thread if none is selected
   const resolvedActiveThreadId =
     activeThreadId ?? (threads.length > 0 ? threads[0].id : null)
 
@@ -52,7 +73,6 @@ export const useChatManager = () => {
         ['chat-threads', visitorId],
         (oldThreads: ChatThread[] = []) => [newThread, ...oldThreads]
       )
-      // Explicitly set this as the active thread so it doesn't bounce back
       setActiveThreadId(newThread.id)
       queryClient.setQueryData(['chat-messages', newThread.id], [])
       queryClient.invalidateQueries({ queryKey: ['chat-threads', visitorId] })
@@ -65,7 +85,7 @@ export const useChatManager = () => {
   >({
     queryKey: ['chat-messages', resolvedActiveThreadId],
     queryFn: () => fetchMessages(resolvedActiveThreadId!),
-    enabled: !!resolvedActiveThreadId,
+    enabled: !!resolvedActiveThreadId && !isVisitorModalOpen,
     staleTime: 1000 * 60,
   })
 
@@ -75,12 +95,10 @@ export const useChatManager = () => {
       const currentThreadId = resolvedActiveThreadId!
       const assistantMessageId = 'temp-assistant-' + Date.now()
 
-      // Check if this thread is still titled "New Conversation" -> Auto-rename it to the first prompt
       const currentThread = threads.find((t) => t.id === currentThreadId)
       if (currentThread && currentThread.title === 'New Conversation') {
         const newTitle =
           content.length > 30 ? content.substring(0, 30) + '...' : content
-        // Optimistically update thread title in cache
         queryClient.setQueryData(
           ['chat-threads', visitorId],
           (old: ChatThread[] = []) =>
@@ -127,7 +145,6 @@ export const useChatManager = () => {
         currentThreadId,
       ])
 
-      // Instantly show the user's message optimistically
       queryClient.setQueryData(
         ['chat-messages', currentThreadId],
         (old: ChatMessage[] = []) => [
@@ -164,9 +181,13 @@ export const useChatManager = () => {
 
   return {
     visitorId,
+    visitorName,
+    visitorEmail,
+    isVisitorModalOpen,
+    registerVisitor,
     threads,
     activeThreadId: resolvedActiveThreadId,
-    setActiveThreadId, // Passed to sidebar to allow clicking history items!
+    setActiveThreadId,
     isLoadingThreads,
     startNewThread,
     isCreatingThread,

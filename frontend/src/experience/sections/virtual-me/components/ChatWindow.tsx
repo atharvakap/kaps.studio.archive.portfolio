@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { PanelLeftOpen } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { useChatManager } from '../hooks/useChatManager'
 import type {
   ChatMessage,
   AttachmentMetadata,
@@ -15,17 +14,21 @@ import { ChatSkeleton } from './ChatSkeleton'
 
 interface ChatWindowProps {
   setIsSidebarOpen: (isOpen: boolean) => void
+  messages: ChatMessage[]
+  isLoadingMessages: boolean
+  sendMessage: (content: string) => void
+  isSendingMessage: boolean
+  activeThreadId: string | null
 }
 
-export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
-  const {
-    messages,
-    isLoadingMessages,
-    sendMessage,
-    isSendingMessage,
-    activeThreadId,
-  } = useChatManager()
-
+export const ChatWindow = ({
+  setIsSidebarOpen,
+  messages,
+  isLoadingMessages,
+  sendMessage,
+  isSendingMessage,
+  activeThreadId,
+}: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll to the bottom whenever messages change or generate
@@ -78,7 +81,6 @@ export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
           </div>
         ) : (
           messages.map((msg: ChatMessage, index: number) => {
-            // Type cast metadata safely
             const metadata = msg.metadata as AttachmentMetadata | undefined
             const isLastMessage = index === messages.length - 1
 
@@ -101,13 +103,13 @@ export const ChatWindow = ({ setIsSidebarOpen }: ChatWindowProps) => {
 
                 <div className="flex flex-col max-w-[calc(100%-3rem)] min-w-0">
                   <div
-                    className={`px-4 py-3 rounded-2xl shadow-sm border break-words overflow-hidden ${
+                    className={`px-4 py-3 rounded-2xl shadow-sm border wrap-break-words overflow-hidden ${
                       msg.role === 'user'
                         ? 'bg-white/70 backdrop-blur-xs border-white/60 rounded-tr-none'
                         : 'bg-white/90 border-white/80 rounded-tl-none'
                     }`}
                   >
-                    <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 break-words overflow-hidden">
+                    <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 wrap-break-words overflow-hidden">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {msg.content}
                       </ReactMarkdown>
