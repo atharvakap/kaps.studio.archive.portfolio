@@ -44,7 +44,7 @@ export const SectionOrchestrator = () => {
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-0 h-full w-full pt-26"
+          className="absolute inset-0 h-full w-full pt-[clamp(6.75rem,16svh,8rem)] lg:pt-26"
         >
           {renderSection()}
         </motion.div>

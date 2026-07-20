@@ -23,7 +23,7 @@ export const NavigationItem = ({ item }: NavigationItemProps) => {
 
         className={`
           relative rounded-full font-medium transition-colors duration-300 cursor-pointer
-          px-4 py-1.5 text-xs sm:px-6 sm:py-2 sm:text-sm
+          px-3 py-1.5 text-xs sm:px-4 md:px-5 lg:px-6 sm:py-2 sm:text-sm
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 
           focus-visible:ring-offset-2 focus-visible:ring-offset-black/50
         `}

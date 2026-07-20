@@ -2,23 +2,53 @@
 html,
 body,
 #root {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    /* background-color: var(--bg-color); */
-    background-image: url(../../public/bg2.png);
-    color: var(--text-color);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* background-color: var(--bg-color); */
+  background-image: url(../../public/bg2.png);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 /* Smooth scrolling for anchor links later in the portfolio */
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+#root {
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 /* Prevent accidental text selection on UI elements */
 .no-select {
-    user-select: none;
+  user-select: none;
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -27,8 +27,8 @@ export const VisitorModal = ({ isOpen, onSubmit }: VisitorModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-      <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-3 sm:p-4 animate-in fade-in duration-300">
+      <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-3xl p-5 sm:p-6 md:p-8 max-w-md w-full max-h-[min(90svh,42rem)] overflow-y-auto glass-scrollbar shadow-2xl">
         <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-[#FF6B00] to-orange-500 flex items-center justify-center mb-4 shadow-md">
           <Sparkles className="text-white" size={24} />
         </div>

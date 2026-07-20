@@ -33,24 +33,24 @@ export const AboutSection = () => {
     : ['Biography data not found. Please seed the database.']
 
   return (
-    <section className="h-full w-full flex flex-col items-center justify-start px-6 md:px-12 lg:px-24 pb-24">
+    <section className="h-full w-full min-h-0 flex flex-col items-center justify-start overflow-y-auto glass-scrollbar px-4 sm:px-6 md:px-12 lg:px-24 pb-8 lg:pb-14">
       {/* --- SECTION HEADER (Static, loads instantly) --- */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col items-center justify-center text-center mt-20 md:mt-2 mb-12 lg:mb-2"
+        className="flex flex-col items-center justify-center text-center mt-0 mb-6 md:mb-8 lg:mb-3 shrink-0"
       >
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-4 opacity-70">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-3 lg:mb-4 opacity-70">
           About
         </h1>
-        <h2 className="text-sm md:text-base font-mono uppercase tracking-[0.2em] opacity-60 m-0">
+        <h2 className="text-xs sm:text-sm md:text-base font-mono uppercase tracking-[0.16em] sm:tracking-[0.2em] opacity-60 m-0">
           Identity & Core Philosophy
         </h2>
       </motion.div>
 
       {/* --- TWO-COLUMN CONTENT CONTAINER --- */}
-      <div className="w-full max-w-6xl flex-1 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 xl:gap-32 items-start mt-4">
+      <div className="w-full max-w-6xl flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-20 xl:gap-28 items-start mt-0 pb-8">
         {/* --- TEXT AREA --- */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -80,10 +80,10 @@ export const AboutSection = () => {
           ) : (
             // Success State
             <>
-              <h3 className="text-2xl md:text-3xl font-medium tracking-tight mb-6 opacity-60">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight mb-4 md:mb-6 opacity-60">
                 {profile?.title}
               </h3>
-              <div className="space-y-6 text-base md:text-lg opacity-60 leading-relaxed">
+              <div className="space-y-4 md:space-y-6 text-sm sm:text-base md:text-lg opacity-60 leading-relaxed">
                 {paragraphs.map((text, index) => (
                   <p key={index}>{text}</p>
                 ))}

@@ -27,11 +27,11 @@ export const ExperienceCard = memo(
         role="listitem" // Phase 9: A11y Semantic role
         tabIndex={0} // Phase 9: Keyboard navigable
         // Phase 11: Added focus-visible for keyboard users and refined hover border/shadow
-        className="glass-card w-[calc(100%-8px)] rounded-2xl p-6 flex flex-col group transition-all duration-300 hover:shadow-lg dark:hover:shadow-white/5 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
+        className="glass-card w-full rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col group transition-all duration-300 hover:shadow-lg dark:hover:shadow-white/5 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
         aria-label={`${experience.role} at ${experience.company}`}
       >
-        <div className="flex justify-between items-start mb-1">
-          <h3 className="text-lg font-semibold text-black dark:text-black opacity-70 tracking-tight">
+        <div className="flex flex-wrap justify-between items-start gap-2 mb-1">
+          <h3 className="text-base sm:text-lg font-semibold text-black dark:text-black opacity-70 tracking-tight min-w-0">
             {experience.company}
           </h3>
 

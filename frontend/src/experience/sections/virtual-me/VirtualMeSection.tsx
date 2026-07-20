@@ -23,7 +23,7 @@ export const VirtualMeSection = () => {
   } = useChatManager()
 
   return (
-    <section className="h-full w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 pt-2 relative">
+    <section className="h-full w-full min-h-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pt-0 relative overflow-hidden">
       {/* Visitor Onboarding Modal */}
       <VisitorModal isOpen={isVisitorModalOpen} onSubmit={registerVisitor} />
 
@@ -32,7 +32,7 @@ export const VirtualMeSection = () => {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex h-full w-full max-w-6xl glass-panel overflow-hidden rounded-3xl border border-white/30 shadow-2xl bg-white/10 backdrop-blur-xl relative"
+        className="flex h-full min-h-0 w-full max-w-6xl glass-panel overflow-hidden rounded-2xl sm:rounded-3xl border border-white/30 shadow-2xl bg-white/10 backdrop-blur-xl relative"
       >
         <ChatSidebar
           isOpen={isSidebarOpen}

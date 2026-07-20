@@ -31,12 +31,12 @@ export const ProjectCard = memo(({ project }: ProjectCardProps) => {
   return (
     <motion.div
       whileHover={{ y: -6 }}
-      className="w-80 md:w-95 h-85 shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
+      className="w-[var(--project-card-width,20rem)] h-[clamp(18.5rem,56svh,21.25rem)] shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-3 sm:p-4 shadow-lg hover:shadow-2xl transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
       tabIndex={0}
       role="article"
       aria-labelledby={`project-title-${project.id}`}
     >
-      <div className="relative w-full h-35 rounded-2xl overflow-hidden bg-slate-100 mb-4 shrink-0 shadow-inner">
+      <div className="relative w-full h-[clamp(6.75rem,22svh,8.75rem)] rounded-2xl overflow-hidden bg-slate-100 mb-3 sm:mb-4 shrink-0 shadow-inner">
         {project.featured && (
           <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-black/5 shadow-sm text-slate-800">
             <Sparkles size={14} className="text-[#FF6B00]" />
@@ -70,17 +70,17 @@ export const ProjectCard = memo(({ project }: ProjectCardProps) => {
       <div className="flex flex-col flex-1 px-1">
         <h3
           id={`project-title-${project.id}`}
-          className="text-lg md:text-xl font-bold tracking-tight text-slate-800 mb-1"
+          className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-slate-800 mb-1 line-clamp-2"
         >
           {project.name}
         </h3>
-        <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-light line-clamp-2 mb-3">
+        <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-light line-clamp-2 mb-2 sm:mb-3">
           {project.description}
         </p>
 
         {/* SKILLS RENDER BLOCK */}
         {project.skills && project.skills.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-auto mb-4">
+          <div className="flex flex-wrap gap-1.5 mt-auto mb-3 sm:mb-4 overflow-hidden">
             {project.skills.slice(0, 3).map((skill, index) => (
               <span
                 // Fallback key just in case 'id' is mapped differently
@@ -94,7 +94,7 @@ export const ProjectCard = memo(({ project }: ProjectCardProps) => {
           </div>
         )}
 
-        <div className="flex items-center gap-4 md:gap-6 mt-auto pb-1 shrink-0">
+        <div className="flex flex-wrap items-center gap-x-4 md:gap-x-6 gap-y-2 mt-auto pb-1 shrink-0">
           {project.github_url ? (
             <a
               href={project.github_url}

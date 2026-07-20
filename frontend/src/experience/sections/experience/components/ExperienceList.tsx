@@ -41,7 +41,7 @@ export const ExperienceList = ({
   if (isLoading) {
     return (
       <div
-        className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-2 lg:pr-4"
+        className="flex-1 w-full flex flex-col gap-4 lg:gap-6 overflow-y-auto glass-scrollbar pr-2 lg:pr-4"
         aria-busy="true"
       >
         {[1, 2, 3].map((i) => (
@@ -83,7 +83,7 @@ export const ExperienceList = ({
       animate="show"
       role="list" // Phase 9: Semantic list for screen readers
       aria-label="Professional Experience Timeline"
-      className="flex-1 w-full flex flex-col gap-6 overflow-y-auto glass-scrollbar pr-6 pl-2 relative min-h-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/10 rounded-2xl"
+      className="flex-1 w-full flex flex-col gap-4 lg:gap-6 overflow-y-auto glass-scrollbar pr-2 sm:pr-4 lg:pr-6 pl-0 sm:pl-2 relative min-h-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/10 rounded-2xl"
       tabIndex={0} // Allows keyboard users to scroll the container
     >
       {experiences.map((exp, index) => {
@@ -102,7 +102,7 @@ export const ExperienceList = ({
         return (
           <div
             key={exp.id}
-            className="flex gap-4 lg:gap-8 w-full relative pr-2"
+            className="flex gap-2 sm:gap-4 lg:gap-8 w-full relative pr-0 sm:pr-2"
           >
             <div
               className="hidden lg:flex flex-col items-start w-20 shrink-0 text-xs text-(--text) opacity-60 pt-7"
@@ -113,7 +113,7 @@ export const ExperienceList = ({
             </div>
 
             <div
-              className="flex flex-col items-center relative w-6 shrink-0"
+              className="flex flex-col items-center relative w-4 sm:w-6 shrink-0"
               aria-hidden="true"
             >
               <motion.div
@@ -133,11 +133,11 @@ export const ExperienceList = ({
                   damping: 20,
                   delay: 0.5 + index * 0.15,
                 }}
-                className={`relative mt-8 w-3 h-3 rounded-full ${dotColor} ring-[5px] ${ringColor} transition-all duration-300 z-10`}
+                className={`relative mt-8 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${dotColor} ring-4 sm:ring-[5px] ${ringColor} transition-all duration-300 z-10`}
               />
             </div>
 
-            <div className="flex-1 pb-6 pt-4 w-full min-w-0">
+            <div className="flex-1 pb-4 lg:pb-6 pt-3 lg:pt-4 w-full min-w-0">
               <div
                 className="lg:hidden text-[10px] font-mono text-(--text) opacity-60 mb-2 mt-7"
                 aria-hidden="true"

@@ -34,7 +34,7 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
     <div className="max-w-3xl mx-auto relative group w-full pointer-events-auto">
       <div className="absolute -inset-0.5 bg-linear-to-r from-[#FF6B00]/20 to-orange-400/20 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500 pointer-events-none"></div>
 
-      <div className="relative flex items-end gap-2 bg-white/70 backdrop-blur-xl border border-white/60 rounded-2xl p-2 shadow-sm focus-within:shadow-md focus-within:border-white/90 transition-all pointer-events-auto">
+      <div className="relative flex items-end gap-2 bg-white/70 backdrop-blur-xl border border-white/60 rounded-2xl p-1.5 sm:p-2 shadow-sm focus-within:shadow-md focus-within:border-white/90 transition-all pointer-events-auto">
         <textarea
           ref={textareaRef}
           value={text}
@@ -48,14 +48,14 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
           }}
           placeholder="Ask me anything..."
           disabled={disabled}
-          className="flex-1 max-h-32 min-h-11 bg-transparent border-none resize-none px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0 scrollbar-none disabled:opacity-50 pointer-events-auto"
+          className="flex-1 max-h-32 min-h-10 sm:min-h-11 bg-transparent border-none resize-none px-2 sm:px-3 py-2.5 sm:py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0 scrollbar-none disabled:opacity-50 pointer-events-auto"
           rows={1}
         />
         <button
           onClick={handleSend}
           disabled={text.trim().length === 0 || disabled}
           className={cn(
-            'p-3 rounded-xl flex items-center justify-center transition-all shrink-0 mb-0.5 pointer-events-auto',
+            'p-2.5 sm:p-3 rounded-xl flex items-center justify-center transition-all shrink-0 mb-0.5 pointer-events-auto',
             text.trim().length > 0 && !disabled
               ? 'bg-[#FF6B00] text-white shadow-md hover:bg-[#FF6B00]/90 active:scale-95'
               : 'bg-slate-100 text-slate-300'

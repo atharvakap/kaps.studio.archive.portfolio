@@ -7,7 +7,7 @@ export const Portrait = ({ avatarUrl }: PortraitProps) => {
   const imageSrc = avatarUrl || '/portrait.png'
 
   return (
-    <div className="relative w-full max-w-sm aspect-square mx-auto mt-8 md:mt-12">
+    <div className="relative w-[min(22rem,70vw,42svh)] max-w-sm aspect-square mx-auto mt-0 md:mt-4 lg:mt-8">
       <div className="absolute inset-0 rounded-full bg-black/4 dark:bg-white/4 shadow-inner border border-black/5 dark:border-white/5"></div>
 
       <div className="absolute inset-0 rounded-full overflow-hidden">

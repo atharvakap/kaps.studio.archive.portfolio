@@ -41,18 +41,18 @@ export const SkillPill = ({ skill }: SkillPillProps) => {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
       }}
       // Refined styling, padding, smaller dot, and borders
-      className="glass-pill flex items-center gap-2 px-3 py-1 cursor-default rounded-full group border border-black/10 dark:border-white/10"
+      className="glass-pill flex max-w-full items-center gap-2 px-3 py-1 cursor-default rounded-full group border border-black/10 dark:border-white/10"
     >
       <div
         className={`w-1 h-1 rounded-full ${getProficiencyStyle(skill.proficiency)}`}
       />
 
-      <span className="text-s font-light text-(--text) tracking-wide group-hover:text-(--text-h) transition-colors">
+      <span className="min-w-0 truncate text-xs sm:text-sm font-light text-(--text) tracking-wide group-hover:text-(--text-h) transition-colors">
         {skill.name}
       </span>
 
       {/* 2. Changed number text span: Removed opacity-0 and group-hover:opacity-40, always use text color */}
-      <span className="text-[9px] font-mono uppercase tracking-widest ml-0.5 text-(--text)">
+      <span className="text-[9px] font-mono uppercase tracking-widest ml-0.5 text-(--text) shrink-0">
         {skill.proficiency}
       </span>
     </motion.div>
