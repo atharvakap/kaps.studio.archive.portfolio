@@ -36,11 +36,18 @@ async def generate_response_stream(
         # 2. Persist the User's message to the database immediately
         await chat_service.add_message(session, thread_id, MessageRole.user, query)
 
-        # 3. Retrieve the absolute best chunks from the database
+        # 3. Permanently rename the thread from "New Conversation" to match the user's prompt
+        if thread.title == "New Conversation":
+            new_title = query[:30] + "..." if len(query) > 30 else query
+            thread.title = new_title
+            session.add(thread)
+            await session.commit()
+
+        # 4. Retrieve the absolute best chunks from the database
         # Kept at -1.0 to completely disable the threshold filter!
         retrieved_chunks = await retrieve(query, top_k=4, similarity_threshold=-1.0)
 
-        # 4. THE GROUNDING CHECK
+        # 5. THE GROUNDING CHECK
         if not retrieved_chunks:
             logger.info("grounding_failed_no_context", query=query)
             yield NO_CONTEXT_FALLBACK
@@ -48,10 +55,10 @@ async def generate_response_stream(
             await chat_service.add_message(session, thread_id, MessageRole.assistant, NO_CONTEXT_FALLBACK)
             return
 
-        # 5. Format the database chunks into a readable string
+        # 6. Format the database chunks into a readable string
         context_block = build_context_block(retrieved_chunks)
         
-        # 6. Build the Memory Block
+        # 7. Build the Memory Block
         # Fetch previous messages to give Virtual Me context for follow-up questions
         previous_messages = await chat_service.list_messages(session, thread_id)
         history_text = "--- Conversation History ---\n"
@@ -61,7 +68,7 @@ async def generate_response_stream(
             role_name = "User" if msg.role == MessageRole.user else "Virtual Me"
             history_text += f"{role_name}: {msg.content}\n"
         
-        # 7. Construct the final grounded prompt
+        # 8. Construct the final grounded prompt
         grounded_prompt = (
             f"Here is the retrieved context from Atharva's database:\n\n"
             f"{context_block}\n\n"
@@ -72,15 +79,50 @@ async def generate_response_stream(
 
         logger.info("grounding_successful_streaming_response", chunk_count=len(retrieved_chunks))
 
-        # 8. Invoke PydanticAI and capture the full response as it streams
+        # 9. Invoke PydanticAI and capture the full response as it streams
         full_assistant_response = ""
         async with virtual_me_agent.run_stream(grounded_prompt) as result:
             async for chunk in result.stream_text(delta=True):
                 full_assistant_response += chunk
                 yield chunk
 
-        # 9. Persist the fully compiled Assistant message to the database
-        await chat_service.add_message(session, thread_id, MessageRole.assistant, full_assistant_response)
+        # 10. Check if the resume tool was triggered during the agent execution
+        tool_data = None
+        for message in result.all_messages():
+            if hasattr(message, "parts"):
+                for part in message.parts:
+                    if (
+                        part.part_kind == "tool-return"
+                        and isinstance(part.content, dict)
+                        and part.content.get("type") == "resume"
+                    ):
+                        tool_data = part.content
+
+        # 11. Persist the fully compiled Assistant message to the database with proper typing & metadata
+        if tool_data:
+            await chat_service.add_message(
+                session=session,
+                thread_id=thread_id,
+                role=MessageRole.assistant,
+                content="Here is my latest resume:",
+                message_type="attachment",
+                metadata={
+                    "type": "resume",
+                    "title": tool_data["title"],
+                    "url": tool_data["url"],
+                    "version": tool_data["version"]
+                }
+            )
+        else:
+            await chat_service.add_message(
+                session=session, 
+                thread_id=thread_id, 
+                role=MessageRole.assistant, 
+                content=full_assistant_response,
+                message_type="text",
+                metadata=None
+            )
+            
         logger.info("virtual_me_streaming_completed")
 
     except Exception as e:

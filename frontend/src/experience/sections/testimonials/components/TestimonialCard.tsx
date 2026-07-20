@@ -11,11 +11,11 @@ export const TestimonialCard = memo(({ testimonial }: TestimonialCardProps) => {
   return (
     <motion.div
       whileHover={{ y: -6 }}
-      className="w-80 md:w-110 h-96 shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
+      className="w-[var(--testimonial-card-width,20rem)] h-[clamp(20rem,58svh,24rem)] shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
     >
-      <Quote size={32} className="text-[#FF6B00]/20 mb-6 shrink-0" />
+      <Quote size={32} className="text-[#FF6B00]/20 mb-4 md:mb-6 shrink-0" />
 
-      <p className="flex-1 text-slate-600 text-sm md:text-base leading-relaxed font-light italic overflow-y-auto scrollbar-none mb-6">
+      <p className="flex-1 text-slate-600 text-sm md:text-base leading-relaxed font-light italic overflow-y-auto scrollbar-none mb-4 md:mb-6">
         "{testimonial.content}"
       </p>
 

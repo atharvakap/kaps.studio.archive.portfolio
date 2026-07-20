@@ -1,0 +1,58 @@
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { ChatSidebar } from './components/ChatSidebar'
+import { ChatWindow } from './components/ChatWindow'
+import { VisitorModal } from './components/VisitorModal'
+import { useChatManager } from './hooks/useChatManager'
+
+export const VirtualMeSection = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const {
+    visitorId,
+    threads,
+    activeThreadId,
+    setActiveThreadId,
+    startNewThread,
+    isCreatingThread,
+    isVisitorModalOpen,
+    registerVisitor,
+    messages,
+    isLoadingMessages,
+    sendMessage,
+    isSendingMessage,
+  } = useChatManager()
+
+  return (
+    <section className="h-full w-full min-h-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pt-0 relative overflow-hidden">
+      {/* Visitor Onboarding Modal */}
+      <VisitorModal isOpen={isVisitorModalOpen} onSubmit={registerVisitor} />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="flex h-full min-h-0 w-full max-w-6xl glass-panel overflow-hidden rounded-2xl sm:rounded-3xl border border-white/30 shadow-2xl bg-white/10 backdrop-blur-xl relative"
+      >
+        <ChatSidebar
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
+          threads={threads}
+          activeThreadId={activeThreadId}
+          onSelectThread={setActiveThreadId}
+          onNewChat={() => startNewThread(undefined)}
+          isCreating={isCreatingThread}
+          visitorId={visitorId}
+        />
+        <ChatWindow
+          setIsSidebarOpen={setIsSidebarOpen}
+          messages={messages}
+          isLoadingMessages={isLoadingMessages}
+          sendMessage={sendMessage}
+          isSendingMessage={isSendingMessage}
+          activeThreadId={activeThreadId}
+        />
+      </motion.div>
+    </section>
+  )
+}

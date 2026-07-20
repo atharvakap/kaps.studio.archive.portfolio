@@ -18,4 +18,4 @@ class ResumeService:
         if not resume:
             raise NotFoundError("No active resume found.")
 
-        return result.scalars().first()
+        return resume # <-- Fixed duplicate execution call

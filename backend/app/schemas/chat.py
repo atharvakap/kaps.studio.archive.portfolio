@@ -1,5 +1,5 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Optional, Dict, Any
 from uuid import UUID
 from datetime import datetime
 from app.models.chat_message import MessageRole
@@ -13,6 +13,12 @@ class VisitorCreate(BaseModel):
 class ThreadCreate(BaseModel):
     visitor_id: UUID
     title: str = "New Conversation"
+    
+class MessageCreate(BaseModel):
+    role: MessageRole
+    content: str
+    message_type: Optional[str] = "text"
+    metadata: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
 # --- Responses (Data going OUT to the frontend) ---
 
@@ -39,6 +45,9 @@ class MessageResponse(BaseModel):
     thread_id: UUID
     role: MessageRole
     content: str
+    message_type: str
+    # Map the ORM's 'metadata_' attribute to standard 'metadata' in JSON output
+    metadata: Dict[str, Any] = Field(default_factory=dict, validation_alias="metadata_")
     created_at: datetime
     
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)

@@ -14,18 +14,18 @@ export const ExperienceSection = () => {
   )
 
   return (
-    <section className="relative h-full w-full flex flex-col items-center px-4 md:px-12 lg:px-24 pb-8 pt-2">
+    <section className="relative h-full w-full min-h-0 flex flex-col items-center overflow-hidden px-4 md:px-12 lg:px-24 pb-4 lg:pb-8 pt-0">
       {/* SECTION HEADING */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="flex flex-col items-center text-center max-w-2xl mb-2 lg:mb-4 space-y-2 lg:space-y-4 shrink-0"
+        className="flex flex-col items-center text-center max-w-2xl mb-2 lg:mb-4 space-y-1.5 lg:space-y-4 shrink-0"
       >
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight opacity-70">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight opacity-70">
           Experience
         </h1>
-        <h2 className="text-xs md:text-base font-mono uppercase tracking-[0.2em] opacity-60 m-2 lg:m-4">
+        <h2 className="text-xs md:text-base font-mono uppercase tracking-[0.16em] sm:tracking-[0.2em] opacity-60 m-0 lg:m-4">
           Professional Journey
         </h2>
         <div className="w-10 lg:w-12 h-1 bg-(--accent) rounded-full opacity-80" />
@@ -36,9 +36,9 @@ export const ExperienceSection = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-6xl flex-1 min-h-0 glass-slider rounded-3xl lg:rounded-4xl p-4 lg:p-10 flex flex-col lg:grid lg:grid-cols-[300px_1fr] gap-6 lg:gap-12 relative overflow-hidden mt-4 lg:mt-0"
+        className="w-full max-w-6xl flex-1 min-h-0 glass-slider rounded-3xl lg:rounded-4xl p-3 sm:p-4 lg:p-10 flex flex-col lg:grid lg:grid-cols-[minmax(240px,300px)_1fr] gap-3 sm:gap-4 lg:gap-12 relative overflow-hidden mt-2 lg:mt-0"
       >
-        <div className="flex flex-col shrink-0">
+        <div className="flex flex-col shrink-0 min-h-0 lg:h-full">
           <SummaryCard experiences={experiences} isLoading={isLoading} />
         </div>
 

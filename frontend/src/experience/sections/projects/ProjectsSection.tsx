@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, type CSSProperties } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useProjects } from './hooks/useProjects'
@@ -7,10 +7,33 @@ import { ProjectCard } from './components/ProjectCard'
 export const ProjectsSection = () => {
   const { data: projects, isLoading, isError } = useProjects()
   const carouselRef = useRef<HTMLDivElement>(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(1) // Default to second element
   const prefersReducedMotion = useReducedMotion()
 
   const featuredProjects = projects?.filter((p) => p.featured) || []
+
+  const carouselStyle = {
+    '--project-card-width': 'clamp(18rem, 78vw, 23.75rem)',
+    paddingLeft: 'calc(50% - (var(--project-card-width) / 2))',
+    paddingRight: 'calc(50% - (var(--project-card-width) / 2))',
+  } as CSSProperties
+
+  // Scroll to the second element on initial load/render
+  useEffect(() => {
+    const container = carouselRef.current
+    if (!container || featuredProjects.length < 2) return
+
+    const secondChild = container.querySelector(
+      '[data-index="1"]'
+    ) as HTMLElement
+    if (secondChild) {
+      secondChild.scrollIntoView({
+        behavior: 'auto', // Instant jump on load so it opens on the second card
+        block: 'nearest',
+        inline: 'center',
+      })
+    }
+  }, [featuredProjects.length])
 
   useEffect(() => {
     const container = carouselRef.current
@@ -27,16 +50,22 @@ export const ProjectsSection = () => {
       { root: container, rootMargin: '0px', threshold: 0.6 }
     )
 
-    // Specifically target the data-index elements to avoid observing spacers/buttons
     const cards = container.querySelectorAll('[data-index]')
     cards.forEach((child) => observer.observe(child))
     return () => observer.disconnect()
   }, [featuredProjects.length])
 
+  const getScrollAmount = () => (carouselRef.current?.clientWidth || 420) * 0.82
   const scrollLeft = () =>
-    carouselRef.current?.scrollBy({ left: -400, behavior: 'smooth' })
+    carouselRef.current?.scrollBy({
+      left: -getScrollAmount(),
+      behavior: 'smooth',
+    })
   const scrollRight = () =>
-    carouselRef.current?.scrollBy({ left: 400, behavior: 'smooth' })
+    carouselRef.current?.scrollBy({
+      left: getScrollAmount(),
+      behavior: 'smooth',
+    })
   const scrollToProject = (index: number) => {
     const child = carouselRef.current?.querySelector(
       `[data-index="${index}"]`
@@ -50,14 +79,14 @@ export const ProjectsSection = () => {
 
   if (isLoading || isError || !featuredProjects.length) {
     return (
-      <section className="h-full w-full flex items-center justify-center font-mono opacity-50 text-slate-800">
-        Loading Projects...
+      <section className="h-full w-full flex items-center justify-center px-4 text-center font-mono opacity-50 text-slate-800">
+        {isError ? 'Unable to load projects.' : 'Loading Projects...'}
       </section>
     )
   }
 
   return (
-    <section className="relative h-full w-full flex flex-col items-center pt-4 md:pt-8 pb-4 overflow-hidden">
+    <section className="relative h-full w-full min-h-0 flex flex-col items-center pt-0 md:pt-2 pb-3 md:pb-4 overflow-hidden">
       <motion.div
         initial={
           prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }
@@ -66,7 +95,7 @@ export const ProjectsSection = () => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="shrink-0 flex flex-col items-center text-center max-w-2xl px-4 z-10"
       >
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-800 mb-1 opacity-80">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-800 mb-1 opacity-80">
           Projects
         </h1>
         <h2 className="text-xs md:text-sm font-medium text-slate-500 mb-3">
@@ -89,7 +118,7 @@ export const ProjectsSection = () => {
         initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative w-full flex-1 min-h-0 mt-2 md:mt-4 mb-2 flex items-center group"
+        className="relative w-full flex-1 min-h-0 mt-1 md:mt-3 mb-1 flex items-center group"
       >
         <button
           onClick={scrollLeft}
@@ -99,16 +128,10 @@ export const ProjectsSection = () => {
           <ChevronLeft size={24} />
         </button>
 
-        {/* 
-            THE FIX: Dynamic Padding for Center Alignment
-            - Mobile card is 320px wide (half is 160px)
-            - Desktop card is 380px wide (half is 190px)
-            By padding the container with exactly `50% - halfCardWidth`, we force the first card to snap to the dead center of the screen, creating a cover-flow effect. 
-            If there is only 1 card, it sits perfectly in the middle with no left-bias.
-        */}
         <div
           ref={carouselRef}
-          className="w-full h-full flex overflow-x-auto snap-x snap-mandatory gap-6 items-center py-6 scrollbar-none px-[calc(50%-160px)] md:px-[calc(50%-190px)]"
+          style={carouselStyle}
+          className="w-full h-full flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 items-center py-3 sm:py-5 md:py-6 scrollbar-none"
         >
           {featuredProjects.map((project, index) => (
             <motion.div
@@ -137,7 +160,7 @@ export const ProjectsSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        className="shrink-0 flex flex-col items-center gap-3 z-10 mt-auto pb-4"
+        className="shrink-0 flex flex-col items-center gap-3 z-10 mt-auto pb-1 md:pb-3"
       >
         <div className="flex items-center justify-center gap-3" role="tablist">
           {featuredProjects.map((_, index) => (
