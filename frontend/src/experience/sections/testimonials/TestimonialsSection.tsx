@@ -5,7 +5,7 @@ import { useTestimonials } from './hooks/useTestimonials'
 import { TestimonialCard } from './components/TestimonialCard'
 
 export const TestimonialsSection = () => {
-  const { data: testimonials = [], isLoading, error } = useTestimonials()
+  const { data: testimonials = [], isLoading, error } = useTestimonials(1)
   const carouselRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const prefersReducedMotion = useReducedMotion()
