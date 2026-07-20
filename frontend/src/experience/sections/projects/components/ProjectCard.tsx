@@ -31,7 +31,7 @@ export const ProjectCard = memo(({ project }: ProjectCardProps) => {
   return (
     <motion.div
       whileHover={{ y: -6 }}
-      className="w-[var(--project-card-width,20rem)] h-[clamp(18.5rem,56svh,21.25rem)] shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-3 sm:p-4 shadow-lg hover:shadow-2xl transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
+      className="w-(--project-card-width,20rem) h-[clamp(18.5rem,56svh,21.25rem)] shrink-0 flex flex-col bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl p-3 sm:p-4 shadow-lg hover:shadow-2xl transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
       tabIndex={0}
       role="article"
       aria-labelledby={`project-title-${project.id}`}
