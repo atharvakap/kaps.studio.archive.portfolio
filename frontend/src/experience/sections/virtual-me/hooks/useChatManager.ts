@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   createVisitor,
@@ -11,6 +11,20 @@ import type { ChatMessage, ChatThread } from '../services/virtualMeService'
 
 export const useChatManager = () => {
   const queryClient = useQueryClient()
+
+  // Clear visitor session details from sessionStorage upon browser refresh/unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('virtual_me_visitor_id')
+      sessionStorage.removeItem('virtual_me_visitor_name')
+      sessionStorage.removeItem('virtual_me_visitor_email')
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
 
   // Visitor identity state stored in sessionStorage
   const [visitorId, setVisitorId] = useState<string | null>(() =>
