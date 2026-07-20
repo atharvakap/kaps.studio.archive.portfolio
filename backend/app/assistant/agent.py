@@ -34,7 +34,7 @@ async def get_latest_resume(ctx: RunContext) -> dict:
             
             return {
                 "type": "resume",
-                "title": f"Atharva_Kapadnis_Resume_v{resume.version}.pdf",
+                "title": f"Atharva_Kapile_Resume_v{resume.version}.pdf",
                 "url": resume.file_url,
                 "version": resume.version
             }
