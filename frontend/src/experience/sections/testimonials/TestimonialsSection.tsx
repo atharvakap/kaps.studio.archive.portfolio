@@ -37,7 +37,7 @@ export const TestimonialsSection = () => {
 
   if (isLoading)
     return (
-      <div className="h-full w-full flex items-center justify-center px-4 text-center font-mono opacity-50">
+      <div className="h-full w-full flex items-center justify-center px-4 text-center font-mono opacity-70">
         Loading Testimonials...
       </div>
     )

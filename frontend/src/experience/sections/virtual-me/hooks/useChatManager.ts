@@ -93,6 +93,28 @@ export const useChatManager = () => {
     },
   })
 
+  // ---------------------------------------------------------
+  // Auto-create a first thread if the user has 0 threads
+  // ---------------------------------------------------------
+  useEffect(() => {
+    if (
+      visitorId &&
+      !isVisitorModalOpen &&
+      !isLoadingThreads &&
+      threads.length === 0 &&
+      !isCreatingThread
+    ) {
+      startNewThread(undefined)
+    }
+  }, [
+    visitorId,
+    isVisitorModalOpen,
+    isLoadingThreads,
+    threads.length,
+    isCreatingThread,
+    startNewThread,
+  ])
+
   // 4. Fetch messages for the currently active thread
   const { data: messages = [], isLoading: isLoadingMessages } = useQuery<
     ChatMessage[]
