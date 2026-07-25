@@ -6,11 +6,12 @@ interface TerminalProps {
 
 const COMMAND = 'load Portfolio'
 const OUTPUTS = [
+  '[First load may take up to 60 sec due to server cold start.]',
+  'Initializing Portfolio...',
   'Loading assets...',
-  'Loading sections...',
-  'Loading styles...',
-  'Loading glass...',
-  'Loading virtual me...',
+  'Applying glass effects...',
+  'Connecting to backend...',
+  'Initializing Virtual Me...',
   'Done.',
 ]
 
