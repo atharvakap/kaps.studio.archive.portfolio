@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { PanelLeftOpen } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -11,6 +12,8 @@ import { ChatInput } from './ChatInput'
 import { SuggestedQuestions } from './SuggestedQuestions'
 import { MessageToolbar } from './MessageToolbar'
 import { ChatSkeleton } from './ChatSkeleton'
+import { VoiceMode } from './VoiceMode'
+import { useVoiceSession } from '../hooks/useVoiceSession'
 
 interface ChatWindowProps {
   setIsSidebarOpen: (isOpen: boolean) => void
@@ -19,6 +22,7 @@ interface ChatWindowProps {
   sendMessage: (content: string) => void
   isSendingMessage: boolean
   activeThreadId: string | null
+  visitorId: string | null
 }
 
 export const ChatWindow = ({
@@ -28,8 +32,30 @@ export const ChatWindow = ({
   sendMessage,
   isSendingMessage,
   activeThreadId,
+  visitorId,
 }: ChatWindowProps) => {
+  const queryClient = useQueryClient()
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const {
+    voiceState,
+    transcript,
+    errorMessage,
+    isMicMuted,
+    inputLevel,
+    startVoiceSession,
+    closeVoiceSession,
+    toggleMicrophone,
+  } = useVoiceSession({
+    visitorId,
+    threadId: activeThreadId,
+    onTurnCompleted: () => {
+      if (!activeThreadId) return
+      queryClient.invalidateQueries({ queryKey: ['chat-messages', activeThreadId] })
+      queryClient.invalidateQueries({ queryKey: ['chat-threads', visitorId] })
+    },
+  })
+
+  const isVoiceActive = voiceState !== 'inactive'
 
   // Auto-scroll to the bottom whenever messages change or generate
   useEffect(() => {
@@ -56,6 +82,7 @@ export const ChatWindow = ({
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="md:hidden mr-2 sm:mr-3 p-1.5 text-slate-600 hover:bg-white/40 rounded-lg transition-colors"
+          aria-label="Open conversations"
         >
           <PanelLeftOpen size={20} />
         </button>
@@ -64,7 +91,18 @@ export const ChatWindow = ({
         </h2>
       </header>
 
-      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 scrollbar-none flex flex-col">
+      {isVoiceActive ? (
+        <VoiceMode
+          state={voiceState}
+          transcript={transcript}
+          errorMessage={errorMessage}
+          isMicMuted={isMicMuted}
+          inputLevel={inputLevel}
+          onClose={() => void closeVoiceSession(true)}
+          onToggleMicrophone={toggleMicrophone}
+        />
+      ) : (
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 scrollbar-none flex flex-col">
         {isLoadingMessages ? (
           <ChatSkeleton />
         ) : messages.length === 0 ? (
@@ -103,13 +141,13 @@ export const ChatWindow = ({
 
                 <div className="flex flex-col max-w-[calc(100%-2.5rem)] sm:max-w-[calc(100%-3rem)] min-w-0">
                   <div
-                    className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-sm border wrap-break-words overflow-hidden ${
+                    className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-sm border break-words overflow-hidden ${
                       msg.role === 'user'
                         ? 'bg-white/70 backdrop-blur-xs border-white/60 rounded-tr-none'
                         : 'bg-white/90 border-white/80 rounded-tl-none'
                     }`}
                   >
-                    <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 wrap-break-words overflow-hidden">
+                    <div className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 break-words overflow-hidden">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {msg.content}
                       </ReactMarkdown>
@@ -168,11 +206,15 @@ export const ChatWindow = ({
         {/* Invisible div to anchor the auto-scroll */}
         <div ref={messagesEndRef} className="h-1" />
       </div>
+      )}
 
-      <div className="p-3 sm:p-4 md:p-6 bg-linear-to-t from-white/40 to-transparent shrink-0 pointer-events-auto">
+      {!isVoiceActive && (
+        <div className="p-3 sm:p-4 md:p-6 bg-linear-to-t from-white/40 to-transparent shrink-0 pointer-events-auto">
         <ChatInput
           onSend={handleSend}
           disabled={!activeThreadId || isSendingMessage}
+          onVoiceStart={startVoiceSession}
+          voiceDisabled={!visitorId || !activeThreadId}
         />
         <div className="text-center mt-2 sm:mt-3 pointer-events-auto">
           <p className="text-[10px] text-slate-400 font-medium tracking-wide">
@@ -180,6 +222,7 @@ export const ChatWindow = ({
           </p>
         </div>
       </div>
+      )}
     </div>
   )
 }

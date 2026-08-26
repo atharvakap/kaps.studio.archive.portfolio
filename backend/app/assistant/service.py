@@ -1,5 +1,7 @@
+import asyncio
 import uuid
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
+from typing import Any
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.assistant.agent import virtual_me_agent
@@ -18,7 +20,12 @@ NO_CONTEXT_FALLBACK = (
 async def generate_response_stream(
     query: str, 
     thread_id: uuid.UUID, 
-    session: AsyncSession
+    session: AsyncSession,
+    user_message_type: str = "text",
+    assistant_message_type: str = "text",
+    user_metadata: dict[str, Any] | None = None,
+    assistant_metadata: dict[str, Any] | None = None,
+    on_lifecycle_event: Callable[[str, dict[str, Any] | None], None] | None = None,
 ) -> AsyncGenerator[str, None]:
     """
     Orchestrates the complete Virtual Me flow with Conversation Memory.
@@ -34,7 +41,14 @@ async def generate_response_stream(
             return
 
         # 2. Persist the User's message to the database immediately
-        await chat_service.add_message(session, thread_id, MessageRole.user, query)
+        await chat_service.add_message(
+            session,
+            thread_id,
+            MessageRole.user,
+            query,
+            message_type=user_message_type,
+            metadata=user_metadata,
+        )
 
         # 3. Permanently rename the thread from "New Conversation" to match the user's prompt
         if thread.title == "New Conversation":
@@ -45,14 +59,27 @@ async def generate_response_stream(
 
         # 4. Retrieve the absolute best chunks from the database
         # Kept at -1.0 to completely disable the threshold filter!
+        _emit_lifecycle_event(on_lifecycle_event, "retrieval_started", {"top_k": 4})
         retrieved_chunks = await retrieve(query, top_k=4, similarity_threshold=-1.0)
+        _emit_lifecycle_event(
+            on_lifecycle_event,
+            "retrieval_completed",
+            {"chunk_count": len(retrieved_chunks)},
+        )
 
         # 5. THE GROUNDING CHECK
         if not retrieved_chunks:
             logger.info("grounding_failed_no_context", query=query)
             yield NO_CONTEXT_FALLBACK
             # Persist the fallback as the assistant's official response
-            await chat_service.add_message(session, thread_id, MessageRole.assistant, NO_CONTEXT_FALLBACK)
+            await chat_service.add_message(
+                session,
+                thread_id,
+                MessageRole.assistant,
+                NO_CONTEXT_FALLBACK,
+                message_type=assistant_message_type,
+                metadata=assistant_metadata,
+            )
             return
 
         # 6. Format the database chunks into a readable string
@@ -81,10 +108,16 @@ async def generate_response_stream(
 
         # 9. Invoke PydanticAI and capture the full response as it streams
         full_assistant_response = ""
+        first_chunk_seen = False
+        _emit_lifecycle_event(on_lifecycle_event, "generation_started", None)
         async with virtual_me_agent.run_stream(grounded_prompt) as result:
             async for chunk in result.stream_text(delta=True):
+                if chunk and not first_chunk_seen:
+                    first_chunk_seen = True
+                    _emit_lifecycle_event(on_lifecycle_event, "first_response_token", None)
                 full_assistant_response += chunk
                 yield chunk
+        _emit_lifecycle_event(on_lifecycle_event, "generation_completed", None)
 
         # 10. Check if the resume tool was triggered during the agent execution
         tool_data = None
@@ -119,14 +152,33 @@ async def generate_response_stream(
                 thread_id=thread_id, 
                 role=MessageRole.assistant, 
                 content=full_assistant_response,
-                message_type="text",
-                metadata=None
+                message_type=assistant_message_type,
+                metadata=assistant_metadata
             )
             
         logger.info("virtual_me_streaming_completed")
 
+    except asyncio.CancelledError:
+        logger.info("virtual_me_streaming_cancelled", query=query, thread_id=str(thread_id))
+        raise
     except Exception as e:
         logger.error("virtual_me_streaming_failed", query=query, error=str(e))
         error_msg = "I encountered a technical error while searching my knowledge base."
         yield error_msg
-        await chat_service.add_message(session, thread_id, MessageRole.assistant, error_msg)
+        await chat_service.add_message(
+            session,
+            thread_id,
+            MessageRole.assistant,
+            error_msg,
+            message_type=assistant_message_type,
+            metadata=assistant_metadata,
+        )
+
+
+def _emit_lifecycle_event(
+    callback: Callable[[str, dict[str, Any] | None], None] | None,
+    event_name: str,
+    payload: dict[str, Any] | None,
+) -> None:
+    if callback:
+        callback(event_name, payload)

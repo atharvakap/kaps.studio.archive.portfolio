@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+import { env } from '@/lib/env'
+
+const API_URL = env.apiUrl
 
 export interface ChatVisitor {
   id: string

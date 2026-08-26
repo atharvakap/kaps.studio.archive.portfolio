@@ -51,6 +51,7 @@ export const VirtualMeSection = () => {
           sendMessage={sendMessage}
           isSendingMessage={isSendingMessage}
           activeThreadId={activeThreadId}
+          visitorId={visitorId}
         />
       </motion.div>
     </section>

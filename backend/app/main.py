@@ -17,6 +17,7 @@ from app.exceptions import (
 from app.logging import logger
 from app.api import chat
 from app.api import analytics
+from app.api import voice
 
 
 @asynccontextmanager
@@ -36,6 +37,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Voice-Turn-Id"],
 )
 
 # Global exception handler
@@ -59,3 +61,4 @@ async def file_too_large_exception_handler(request: Request, exc: FileTooLargeEr
 app.include_router(api_router)
 app.include_router(chat.router)
 app.include_router(analytics.router)
+app.include_router(voice.router)

@@ -1,13 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
-import { SendHorizontal, Loader2 } from 'lucide-react'
+import { SendHorizontal, Loader2, Mic2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ChatInputProps {
   onSend: (message: string) => void
+  onVoiceStart?: () => void
   disabled?: boolean
+  voiceDisabled?: boolean
 }
 
-export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
+export const ChatInput = ({
+  onSend,
+  onVoiceStart,
+  disabled,
+  voiceDisabled,
+}: ChatInputProps) => {
   const [text, setText] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -51,9 +58,28 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
           className="flex-1 max-h-32 min-h-10 sm:min-h-11 bg-transparent border-none resize-none px-2 sm:px-3 py-2.5 sm:py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0 scrollbar-none disabled:opacity-50 pointer-events-auto"
           rows={1}
         />
+        {onVoiceStart && (
+          <button
+            type="button"
+            onClick={onVoiceStart}
+            disabled={voiceDisabled || disabled}
+            className={cn(
+              'p-2.5 sm:p-3 rounded-xl flex items-center justify-center transition-all shrink-0 mb-0.5 pointer-events-auto',
+              !voiceDisabled && !disabled
+                ? 'bg-white/70 text-slate-600 hover:bg-white hover:text-[#FF6B00] active:scale-95'
+                : 'bg-slate-100 text-slate-300'
+            )}
+            title="Start voice mode"
+            aria-label="Start voice mode"
+          >
+            <Mic2 size={18} />
+          </button>
+        )}
+
         <button
           onClick={handleSend}
           disabled={text.trim().length === 0 || disabled}
+          aria-label="Send message"
           className={cn(
             'p-2.5 sm:p-3 rounded-xl flex items-center justify-center transition-all shrink-0 mb-0.5 pointer-events-auto',
             text.trim().length > 0 && !disabled

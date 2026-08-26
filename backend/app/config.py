@@ -14,6 +14,11 @@ class Settings(BaseSettings):
 
     openai_api_key: str | None = None
     openai_embedding_model: str = "text-embedding-3-small"
+    openai_realtime_model: str = "gpt-realtime-2.1"
+    openai_realtime_transcription_model: str = "gpt-live-transcribe"
+    openai_realtime_voice: str = "marin"
+    openai_realtime_endpoint: str = "https://api.openai.com/v1/realtime/calls"
+    openai_realtime_timeout_seconds: float = 15.0
 
     supabase_url: str | None = None
     supabase_anon_key: str | None = None
